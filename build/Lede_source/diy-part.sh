@@ -145,13 +145,13 @@ sed -i 's/"MultiSD_Lite"/"组播路由"/g'  package/GWen124/luci-app-msd_lite/lu
 #sed -i 's/"解锁网易云灰色歌曲"/"网易音乐"/g' feeds/luci/applications/luci-app-unblockmusic/po/zh-cn/unblockmusic.po
 sed -i 's/"解除网易云音乐播放限制"/"网易音乐"/g' package/GWen124/luci-app-unblockneteasemusic/luasrc/controller/unblockneteasemusic.lua
 #sed -i 's/天翼家庭云\/云盘提速/天翼云盘/g' feeds/luci/applications/luci-app-familycloud/luasrc/controller/familycloud.lua
-sed -i 's/"AdGuard Home"/"AdHome"/g' `grep "AdGuard Home" -rl ./`
+#sed -i 's/"AdGuard Home"/"AdHome"/g' `grep "AdGuard Home" -rl ./`
 sed -i 's/"Frp 内网穿透"/"Frp客户端"/g' `grep "Frp 内网穿透" -rl ./`
 sed -i 's/ShadowSocksR Plus+/SSR Plus+/g' package/GWen124/luci-app-ssr-plus/luasrc/controller/shadowsocksr.lua
 sed -i 's/msgstr "UPnP"/msgstr "UPnP服务"/g' feeds/luci/applications/luci-app-upnp/po/zh-cn/upnp.po
 sed -i 's/Hello World/VssrVPN/g'  package/GWen124/luci-app-vssr/luasrc/controller/vssr.lua
 sed -i 's/"Cloudflare速度测试"/"Cloudflare"/g' package/GWen124/luci-app-cloudflarespeedtest/po/zh-cn/cloudflarespeedtest.po
-sed -i 's/"TelegramBot"/"Telegram"/g'  package/GWen124/luci-app-telegrambot/luasrc/controller/telegrambot.lua
+#sed -i 's/"TelegramBot"/"Telegram"/g'  package/GWen124/luci-app-telegrambot/luasrc/controller/telegrambot.lua
 #sed -i 's/"DDNS.to内网穿透"/"DDNSTO"/g' `grep "DDNS.to内网穿透" -rl ./`
 #sed -i 's/"网页快捷菜单"/"快捷菜单"/g'  package/GWen124/luci-app-shortcutmenu/po/zh-cn/shortcutmenu.po
 #sed -i 's/Adblock Plus+/Adb Plus+/g'  package/GWen124/luci-app-adblock-plus/luasrc/controller/adblock.lua
@@ -170,7 +170,7 @@ sed -i 's/"TelegramBot"/"Telegram"/g'  package/GWen124/luci-app-telegrambot/luas
 #sed -i 's/"Rclone"/"Rclone挂载"/g' feeds/luci/applications/luci-app-rclone/luasrc/controller/rclone.lua
 echo "重命名网络菜单"
 #network
-sed -i 's/"IP\/MAC绑定"/"地址绑定"/g' feeds/luci/applications/luci-app-arpbind/po/zh-cn/arpbind.po
+sed -i 's/"IP\/MAC 绑定"/"地址绑定"/g' feeds/luci/applications/luci-app-arpbind/po/zh-cn/arpbind.po
 #sed -i 's/"netports_info"/"网口信息"/g' `grep "netports_info" -rl ./`
 sed -i 's/"主机名"/"主机名称"/g' `grep "主机名" -rl ./`
 sed -i 's/"接口"/"网络接口"/g' `grep "接口" -rl ./`
