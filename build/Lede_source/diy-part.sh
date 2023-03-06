@@ -54,10 +54,10 @@ TIME b "修改 系统文件..."
 # curl -fsSL https://raw.githubusercontent.com/GWen124/Script/master/OpenWrt/zzz-default-settings > ./package/lean/default-settings/files/zzz-default-settings
 curl -fsSL https://raw.githubusercontent.com/GWen124/Script/master/OpenWrt/index.htm > ./package/lean/autocore/files/x86/index.htm
 curl -fsSL https://raw.githubusercontent.com/GWen124/Script/master/OpenWrt/ethinfo > ./package/lean/autocore/files/x86/sbin/ethinfo
-# curl -fsSL https://github.com/GWen124/Script/blob/master/OpenWrt/autocore > ./package/lean/autocore/files/x86/autocore
-# curl -fsSL https://github.com/GWen124/Script/blob/master/OpenWrt/tempinfo > ./package/lean/autocore/files/x86/sbin/tempinfo
-# curl -fsSL https://github.com/GWen124/Script/blob/master/OpenWrt/cntime > ./package/lean/autocore/files/x86/sbin/cntime
-# curl -fsSL https://github.com/GWen124/Script/blob/master/OpenWrt/cpuinfo > ./package/lean/autocore/files/x86/sbin/cpuinfo
+# curl -fsSL https://github.com/GWen124/Script/master/OpenWrt/autocore > ./package/lean/autocore/files/x86/autocore
+# curl -fsSL https://github.com/GWen124/Script/master/OpenWrt/tempinfo > ./package/lean/autocore/files/x86/sbin/tempinfo
+# curl -fsSL https://github.com/GWen124/Script/master/OpenWrt/cntime > ./package/lean/autocore/files/x86/sbin/cntime
+# curl -fsSL https://github.com/GWen124/Script/master/OpenWrt/cpuinfo > ./package/lean/autocore/files/x86/sbin/cpuinfo
 # curl -fsSL https://raw.githubusercontent.com/immortalwrt/packages/master/net/dnsproxy/Makefile > feeds/packages/net/dnsproxy/Makefile
 # rm -rf ./package/lean/autocore/files/x86/sbin/getcpu
 TIME b "系统文件 修改完成"
@@ -140,7 +140,7 @@ sed -i 's/"在线用户"/"在线设备"/g' package/GWen124/luci-app-onliner/luas
 #sed -i 's/"autoipsetadder"/"自动设置IP"/g' `grep "autoipsetadder" -rl ./`
 echo "重命名服务菜单"
 #services menu
-sed -i 's/WireGuard 状态/WireGuard/g' feeds/luci/applications/luci-app-wireguard/po/zh-cn/wireguard.po
+#sed -i 's/WireGuard 状态/WireGuard/g' feeds/luci/applications/luci-app-wireguard/po/zh-cn/wireguard.po
 sed -i 's/"PassWall 2"/"PassWall+"/g' package/GWen124/luci-app-passwall2/luasrc/controller/passwall2.lua
 sed -i 's/"MultiSD_Lite"/"组播路由"/g'  package/GWen124/luci-app-msd_lite/luasrc/controller/msd_lite.lua
 #sed -i 's/"解锁网易云灰色歌曲"/"网易音乐"/g' feeds/luci/applications/luci-app-unblockmusic/po/zh-cn/unblockmusic.po
