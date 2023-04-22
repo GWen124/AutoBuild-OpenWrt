@@ -170,7 +170,7 @@ sed -i 's/"Cloudflare速度测试"/"Cloudflare"/g' package/GWen124/luci-app-clou
 #sed -i 's/京东签到服务/京东签到/g' feeds/luci/applications/luci-app-jd-dailybonus/luasrc/controller/jd-dailybonus.lua
 #sed -i 's/"UU游戏加速器"/"UU加速器"/g' `grep "UU游戏加速器" -rl ./`
 #sed -i 's/UU游戏加速器/UU加速器/g' feeds/luci/applications/luci-app-uugamebooster/po/zh-cn/uuplugin.po
-#sed -i 's/"Rclone"/"Rclone挂载"/g' feeds/luci/applications/luci-app-rclone/luasrc/controller/rclone.lua
+sed -i 's/"Rclone"/"Rclone挂载"/g' feeds/luci/applications/luci-app-rclone/luasrc/controller/rclone.lua
 echo "重命名网络菜单"
 #network
 sed -i 's/"IP\/MAC 绑定"/"地址绑定"/g' feeds/luci/applications/luci-app-arpbind/po/zh-cn/arpbind.po
