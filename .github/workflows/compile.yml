@@ -1,14 +1,11 @@
-name: 18.06
+name: Compile
 on:
   workflow_dispatch:
-    inputs:
-      ssh:
-        description: 'ssh-action'
-        required: false
-        default: 'ssh-actions'
-
-  schedule:
-   - cron: 0 0 1 * *
+  push:
+    branches:
+      - main
+    paths:
+      - 'build/Lede_source/relevance/start'
 
 env:
   Github: https://github.com/${{github.repository}}
@@ -23,25 +20,29 @@ env:
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
   TZ: Asia/Shanghai
 
+
 jobs:
   build:
-    runs-on: ubuntu-20.04
-    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
-
     name: 编译 "${{matrix.target}}"
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
+    
+    env:
+      FOLDER_NAME: ${{ matrix.target }}
     strategy:
       fail-fast: false
       matrix:
         target: [Lede_source]
 
-        # [Lede_source,Lienol_source,Mortal_source,Tianling_source]
-
     steps:
-    - name: 准备完成
+    - name: 准备结束
       uses: actions/checkout@v3
 
-    - name: 读取设置
+    - name: 读取脚本
       run: |
+        cd ${GITHUB_WORKSPACE}
+        cp -f build/common/*.sh build/${{matrix.target}}/
+        sudo chmod -R +x build
         source "${GITHUB_WORKSPACE}/build/${{matrix.target}}/settings.ini"
         echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV
         echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV
@@ -57,9 +58,10 @@ jobs:
         echo "REGULAR_UPDATE=${REGULAR_UPDATE}" >> $GITHUB_ENV
         echo "USE_CACHEWRTBUILD=${USE_CACHEWRTBUILD}" >> $GITHUB_ENV
         echo "BY_INFORMATION=${BY_INFORMATION}" >> $GITHUB_ENV
-        echo "AUTOMATIC_AMLOGIC=${AUTOMATIC_AMLOGIC}" >> $GITHUB_ENV
         echo "CangKu=${Apidz##*/}" >> $GITHUB_ENV
         echo "Modelfile=${{matrix.target}}" >> $GITHUB_ENV
+        echo "CPU_SELECTION=${CPU_SELECTION}" >> $GITHUB_ENV
+        source build/${{matrix.target}}/common.sh && settings_variable
         echo "{name}={value}" >> $GITHUB_OUTPUT
         
     - name: 源码版本
@@ -68,41 +70,49 @@ jobs:
         if [[ "${REPO_BRANCH}" == "master" ]]; then
           echo "ZZZ=package/lean/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
           echo "CODE=Lede" >> $GITHUB_ENV
-          echo "OpenWrt_name=18.06" >> $GITHUB_ENV
+          echo "LUCI_EDITION=18.06" >> $GITHUB_ENV
         elif [[ "${REPO_BRANCH}" == "19.07" ]]; then
           echo "ZZZ=package/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
           echo "CODE=Lienol" >> $GITHUB_ENV
-          echo "OpenWrt_name=19.07" >> $GITHUB_ENV
+          echo "LUCI_EDITION=19.07" >> $GITHUB_ENV
         elif [[ "${REPO_BRANCH}" == "openwrt-18.06" ]]; then
           echo "ZZZ=package/emortal/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
           echo "CODE=Mortal" >> $GITHUB_ENV
-          echo "OpenWrt_name=18.06" >> $GITHUB_ENV
+          echo "LUCI_EDITION=18.06" >> $GITHUB_ENV
         fi
         echo "NETIP=package/base-files/files/etc/networkip" >> $GITHUB_ENV
         echo "DELETE=package/base-files/files/etc/deletefile" >> $GITHUB_ENV
+        source build/${{matrix.target}}/common.sh && Diy_variable
         if [ -n "$(ls -A build/common/1022gg 2>/dev/null)" ]; then
           source build/common/common.sh && Diy_gonggao
         fi
 
+    - name: CPU检测
+      run: |
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        if [[ -n "${{ github.event.workflow }}" ]]; then
+          export CPU_SELECTIOY="$(source "${GITHUB_WORKSPACE}/build/${FOLDER_NAME}/settings.ini" && echo "${CPU_SELECTION}")"
+        else
+          export CPU_PASSWORD="1688175475"
+          export CPU_OPTIMIZATION="E5"
+        fi
+        source build/${FOLDER_NAME}/common.sh && CPU_Priority
+        
     - name: 部署环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        docker rmi `docker images -q`
-        sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-        sudo -E apt-get -qq update
-        sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* moby* snap*
-        sudo -E apt -y full-upgrade
-        sudo -E apt -y install ack antlr3 aria2 asciidoc autoconf automake autopoint binutils bison libfuse-dev build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano nodejs ninja-build p7zip p7zip-full patch pkgconf python3 python3-pip libpython3-dev qemu-utils rsync rename scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
-        sudo -E systemctl daemon-reload
-        sudo -E apt-get -y autoremove --purge
-        sudo -E apt-get clean 
+        bash <(curl -fsSL https://raw.githubusercontent.com/waynesg/AutoBuild-OpenWrt/main/build/common/Custom/ubuntu.sh)
+        echo "================================================="
         echo "文件系统        类型   容量  已用  可用 使用% 挂载点"
         df -hT $PWD
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /${{matrix.target}}
         sudo chown $USER:$GROUPS /${{matrix.target}}
-    
+        echo "Home=${GITHUB_WORKSPACE}/openwrt" >> $GITHUB_ENV
+        echo "PATH1=${GITHUB_WORKSPACE}/openwrt/build/${{matrix.target}}" >> $GITHUB_ENV
+
     - name: 下载源码
       working-directory: /${{matrix.target}}
       run: |
@@ -110,8 +120,6 @@ jobs:
         cd openwrt
         ./scripts/feeds update -a > /dev/null 2>&1
         ln -sf /${{matrix.target}}/openwrt $GITHUB_WORKSPACE/openwrt
-        echo "Home=${GITHUB_WORKSPACE}/openwrt" >> $GITHUB_ENV
-        echo "PATH1=${GITHUB_WORKSPACE}/openwrt/build/${{matrix.target}}" >> $GITHUB_ENV
  
     - name: 加载设置
       run: |
@@ -132,6 +140,7 @@ jobs:
         fi
         source "${PATH1}/common.sh" && Diy_all
         /bin/bash "${PATH1}/$DIY_PART_SH"
+        /bin/bash "${PATH1}/waynesg/preset-clash-core.sh" amd64
         ./scripts/feeds update -a
         ./scripts/feeds install -a > /dev/null 2>&1
         ./scripts/feeds install -a
@@ -139,20 +148,13 @@ jobs:
         if [[ "${REGULAR_UPDATE}" == "true" ]]; then
           source "${PATH1}/upgrade.sh" && Diy_Part1
         fi
-        
+ 
     - name: 加载缓存
       if: env.USE_CACHEWRTBUILD == 'true'
       uses: stupidloud/cachewrtbuild@main
       with:
         ccache: 'true'
         prefix: ${{ github.workspace }}/openwrt
-        
-    - name: SSH连接
-      if: env.SSH_ACTIONS == 'true' || (github.event.inputs.ssh == 'ssh')
-      uses: danshui-git/debugger-action@main
-      env:
-         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
     - name: 生成配置
       run: |
@@ -172,10 +174,9 @@ jobs:
         else
           echo "TARGET_PROFILE=armvirt" >> $GITHUB_ENV
         fi
-       
+        
     - name: 编译信息
       run: |
-        wget -qO- --no-check-certificate https://raw.githubusercontent.com/waynesg/scripts/main/serverbench.sh | bash
         cd openwrt
         source "${PATH1}/common.sh" && Diy_chuli > /dev/null 2>&1
         if [ "${REGULAR_UPDATE}" == "true" ]; then
@@ -186,7 +187,7 @@ jobs:
           source "${PATH1}/common.sh" && Diy_xinxi
           chmod -R 755 .
         fi
-
+        
     - name: 下载dl库
       id: package
       run: |
@@ -194,17 +195,6 @@ jobs:
         make download -j8
         find dl -size -1024c -exec rm -f {} \;
     
-    - name: 开始通知
-      if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TELE'
-      run: |
-        echo `date +'%Y-%m-%d %H:%M:%S'` > runtime.log
-        starttime=$(echo `date +'%Y-%m-%d %H:%M:%S'`)
-        if [[ "${SERVERCHAN_SCKEY}" == "TELE" ]]; then
-          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：您正在使用【${{matrix.target}}】文件夹编译固件中(${{env.CangKu}}仓库的#${{env.Run_number}}号),请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
-        elif [[ "${SERVERCHAN_SCKEY}" == "PUSH" ]]; then
-          curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="🎉开始编译" --data "content=🎉正在使用【${{matrix.target}}】文件夹编译固件中(${{env.CangKu}}仓库的#${{env.Run_number}}号),请您耐心等待...... 😋💐" "http://www.pushplus.plus/send"
-        fi
-        
     - name: 编译固件
       id: compile
       run: |
@@ -214,27 +204,10 @@ jobs:
         echo "COMPILESTATUS=success" >> $GITHUB_ENV
         echo "date=$(date "+%Y%m%d%H%M%S")" >> $GITHUB_ENV
         echo "date1=$(date +'%m-%d')" >> $GITHUB_ENV
-        
-    - name: 上传配置
-      if: env.UPLOAD_CONFIG == 'true'
-      uses: actions/upload-artifact@v3
-      with:
-        name: .config_${{ env.CODE }}_${{ env.TARGET_PROFILE }}_${{ env.Compile_Date }}
-        path: config.txt
-        
-    - name: 上传文件
-      if: env.COMPILESTATUS == 'success' && env.UPLOAD_BIN_DIR == 'true'
-      uses: actions/upload-artifact@v3
-      with:
-        name: filename+ipk_${{ env.CODE }}_${{ env.TARGET_PROFILE }}_${{ env.Compile_Date }}
-        path: openwrt/bin
-    
+
     - name: 整理固件
       id: organizer
       run: |
-        if [ "${AUTOMATIC_AMLOGIC}" == "true" ]; then
-          source "${PATH1}/common.sh" && Diy_amlogic
-        fi
         cd openwrt
         cp -Rf bin/targets/*/* "${Home}"/upgrade
         cd bin/targets/*/*
@@ -250,13 +223,13 @@ jobs:
         rename -v "s/^openwrt/${{ env.date1 }}-${{ env.CODE }}/" *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "BOT=TRUE" >> $GITHUB_ENV
-        echo "ORGANIZERSTATUS=success" >> $GITHUB_ENV    
+        echo "ORGANIZERSTATUS=success" >> $GITHUB_ENV
         
     - name: 上传固件
       if: env.ORGANIZERSTATUS == 'success' && env.UPLOAD_FIRMWARE == 'true'
       uses: actions/upload-artifact@main
       with:
-        name: ${{ env.OpenWrt_name }}-${{ env.CODE }}-${{ env.TARGET_PROFILE }}-firmware-${{ env.Compile_Date }}
+        name: ${{ env.LUCI_EDITION }}-${{ env.CODE }}-${{ env.TARGET_PROFILE }}-firmware-${{ env.Compile_Date }}
         path: ${{ env.FIRMWARE }}
           
     - name: 发布信息
@@ -316,21 +289,4 @@ jobs:
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=✨Congratulations✨：您使用【${{matrix.target}}】文件夹编译的[${{ env.CODE }}-${{ env.TARGET_PROFILE }}]固件(${{env.CangKu}}仓库的#${{env.Run_number}}号)顺利编译完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         elif [[ "${SERVERCHAN_SCKEY}" == "PUSH" ]]; then
           curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="[${{ env.CODE }}-${{ env.TARGET_PROFILE }}]编译成功" --data "content=✨Congratulations✨：您使用【${{matrix.target}}】文件夹编译的[${{ env.CODE }}-${{ env.TARGET_PROFILE }}]固件(${{env.CangKu}}仓库的#${{env.Run_number}}号)顺利编译完成了！💐" "http://www.pushplus.plus/send"
-        fi
-
-    - name: 清理脚本
-      uses: Mattraks/delete-workflow-runs@v2
-      continue-on-error: true
-      with:
-        retain_days: 40
-        keep_minimum_runs: 1
-        
-    - name: 清理固件
-      uses: dev-drprasad/delete-older-releases@master
-      continue-on-error: true
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      with:
-        keep_latest: 3
-        delete_tags: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        fi    
