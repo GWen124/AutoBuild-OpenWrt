@@ -25,7 +25,7 @@ TIME() {
 
 echo 
 TIME y "添加软件包"
-rm -rf package/GWen124 && git clone --depth 1 https://github.com/GWen124/OpenWrt-Software -b main package/GWen124
+rm -rf package/GWen124 && git clone --depth 1 https://github.com/GWen124/OpenWrt-Software.git -b main package/GWen124
 
 echo
 TIME y "修改系统文件"
