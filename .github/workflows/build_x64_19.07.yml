@@ -175,7 +175,7 @@ jobs:
        
     - name: 编译信息
       run: |
-        wget -qO- --no-check-certificate https://raw.githubusercontent.com/waynesg/scripts/main/serverbench.sh | bash
+        wget -qO- --no-check-certificate https://raw.githubusercontent.com/GWen124/scripts/main/serverbench.sh | bash
         cd openwrt
         source "${PATH1}/common.sh" && Diy_chuli > /dev/null 2>&1
         if [ "${REGULAR_UPDATE}" == "true" ]; then
