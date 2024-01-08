@@ -126,7 +126,7 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        bash <(curl -fsSL https://raw.githubusercontent.com/GWen124/AutoBuild-OpenWrt/main/build/common/Custom/ubuntu.sh)
+        bash <(curl -fsSL https://raw.githubusercontent.com/GWen124/AutoBuild-OpenWrt/main/build/common/Custom/ubuntu.sh))
         echo "================================================="
         echo "文件系统        类型   容量  已用  可用 使用% 挂载点"
         df -hT $PWD
@@ -174,7 +174,7 @@ jobs:
         fi
         source "${PATH1}/common.sh" && Diy_all
         /bin/bash "${PATH1}/$DIY_PART_SH"
-        /bin/bash "${PATH1}/GWen124/preset-clash-core.sh" amd64
+        /bin/bash "${PATH1}/waynesg/preset-clash-core.sh" amd64
         ./scripts/feeds update -a
         ./scripts/feeds install -a > /dev/null 2>&1
         ./scripts/feeds install -a
