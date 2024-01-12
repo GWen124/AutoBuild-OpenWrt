@@ -94,7 +94,7 @@ jobs:
         if [[ -n "${{ github.event.workflow }}" ]]; then
           export CPU_SELECTIOY="$(source "${GITHUB_WORKSPACE}/build/${FOLDER_NAME}/settings.ini" && echo "${CPU_SELECTION}")"
         else
-          export CPU_PASSWORD="1704690144"
+          export CPU_PASSWORD="1703991532"
           export CPU_OPTIMIZATION="E5"
         fi
         source build/${FOLDER_NAME}/common.sh && CPU_Priority
@@ -174,7 +174,7 @@ jobs:
         fi
         source "${PATH1}/common.sh" && Diy_all
         /bin/bash "${PATH1}/$DIY_PART_SH"
-        /bin/bash "${PATH1}/clash/preset-clash-core.sh" amd64
+        /bin/bash "${PATH1}/GWen124/preset-clash-core.sh" amd64
         ./scripts/feeds update -a
         ./scripts/feeds install -a > /dev/null 2>&1
         ./scripts/feeds install -a
