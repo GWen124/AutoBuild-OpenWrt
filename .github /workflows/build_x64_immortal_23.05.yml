@@ -115,9 +115,9 @@ jobs:
         cd openwrt
         source "${PATH1}/common.sh" && Diy_Immortalwrt
         source "${PATH1}/common.sh" && Diy_all
-        /bin/bash "${PATH1}/waynesg/diy-repo-script.sh"
+        /bin/bash "${PATH1}/GWen124/diy-repo-script.sh"
         /bin/bash "${PATH1}/$DIY_PART_SH"
-        /bin/bash "${PATH1}/waynesg/preset-clash-core.sh" amd64
+        /bin/bash "${PATH1}/GWen124/preset-clash-core.sh" amd64
         ./scripts/feeds update -a
         ./scripts/feeds install -a > /dev/null 2>&1
         ./scripts/feeds install -a
