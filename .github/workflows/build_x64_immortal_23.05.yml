@@ -7,23 +7,23 @@ on:
         required: false
         default: 'ssh-actions'
 
+
   schedule:
     - cron: 0 0 1 * *
 
 env:
-  Github: https://github.com/${{ github.repository }}
-  Author: ${{ github.actor }}
-  Apidz: ${{ github.repository }}
-  Run_number: ${{ github.run_number }}
-  Run_workflow: ${{ github.workflow }}
+  Github: https://github.com/${{github.repository}}
+  Author: ${{github.actor}}
+  Apidz: ${{github.repository}}
+  Run_number: ${{github.run_number}}
+  Run_workflow: ${{github.workflow}}
   REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
   PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
   WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
   TZ: Asia/Shanghai
-  # 新增统一工作空间变量
-  WORKSPACE: ${{ github.workspace }}/build
+
 
 jobs:
   build:
@@ -37,6 +37,8 @@ jobs:
       matrix:
         target: [Immortalwrt_source]
 
+        # [Lede_source,Lienol_source,Mortal_source,Tianling_source,openwrt_amlogic]
+    
     steps:
     - name: 准备结束
       uses: actions/checkout@v4
@@ -44,9 +46,8 @@ jobs:
     - name: 读取设置
       run: |
         cd ${GITHUB_WORKSPACE}
-        # 修复配置文件复制路径
         cp -f build/common/*.sh build/${{matrix.target}}/
-        chmod -R +x build
+        sudo chmod -R +x build
         source "${GITHUB_WORKSPACE}/build/${{matrix.target}}/settings.ini"
         echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV
         echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV
@@ -65,6 +66,7 @@ jobs:
         echo "CangKu=${Apidz##*/}" >> $GITHUB_ENV
         echo "Modelfile=${{matrix.target}}" >> $GITHUB_ENV
         echo "CPU_SELECTION=${CPU_SELECTION}" >> $GITHUB_ENV
+        echo "{name}={value}" >> $GITHUB_OUTPUT
         
     - name: 源码版本
       run: |
@@ -86,31 +88,28 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo -E apt-get -qq update -y
-        sudo -E apt-get -qq install -y gawk git gettext libssl-dev xsltproc zip
-        # 修复目录创建（移除 sudo 操作）
-        mkdir -p "${{ env.WORKSPACE }}/${{ matrix.target }}"
-        chmod -R 755 "${{ env.WORKSPACE }}"
+        sudo -E apt-get -qq install -y gawk git gettext libssl-dev xsltproc zip git-core wget curl grep python3 python3-pip python3-ply
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /${{matrix.target}}
+        sudo chown $USER:$GROUPS /${{matrix.target}}
         git config --global user.email "41898282+github-[bot]@users.noreply.github.com"
         git config --global user.name "github-[bot]"
     
     - name: 下载源码
-      # 修正工作目录路径
-      working-directory: ${{ env.WORKSPACE }}/${{ matrix.target }}
+      working-directory: /${{matrix.target}}
       run: |
         git clone -b "$REPO_BRANCH" --single-branch "$REPO_URL" openwrt
         cd openwrt
         ./scripts/feeds update -a > /dev/null 2>&1
-        # 修复符号链接路径
-        ln -sf "${{ env.WORKSPACE }}/${{ matrix.target }}/openwrt" "$GITHUB_WORKSPACE/openwrt"
-        echo "Home=$GITHUB_WORKSPACE/openwrt" >> $GITHUB_ENV
-        echo "PATH1=$GITHUB_WORKSPACE/openwrt/build/${{ matrix.target }}" >> $GITHUB_ENV
+        ln -sf /${{matrix.target}}/openwrt $GITHUB_WORKSPACE/openwrt
+        echo "Home=${GITHUB_WORKSPACE}/openwrt" >> $GITHUB_ENV
+        echo "PATH1=${GITHUB_WORKSPACE}/openwrt/build/${{matrix.target}}" >> $GITHUB_ENV
  
     - name: 加载设置
       run: |
         echo "Compile_Date=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
-        # 修复文件复制操作
-        cp -Rf ${{ env.WORKSPACE }}/${{ matrix.target }}/openwrt/* openwrt/
-        mv -f "${Home}/build/common/*.sh" "${PATH1}/"
+        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt
+        mv -f "${Home}"/build/common/*.sh "${PATH1}"
         source "${PATH1}/common.sh" && Diy_settings
         [[ "${{ github.event.inputs.ssh }}" == 'ssh' ]] && echo "SSHYC=true" >> $GITHUB_ENV
         cd openwrt
@@ -123,7 +122,7 @@ jobs:
         ./scripts/feeds install -a > /dev/null 2>&1
         ./scripts/feeds install -a
         sleep 5
-        sed -i 's/+libpcre \\$/+libpcre2 \\/g' "${Home}/package/feeds/telephony/freeswitch/Makefile"
+        sed -i 's/+libpcre \\$/+libpcre2 \\/g' "${Home}"/package/feeds/telephony/freeswitch/Makefile
         mv "$PATH1/$CONFIG_FILE" .config
         if [[ "${REGULAR_UPDATE}" == "true" ]]; then
           source "${PATH1}/upgrade.sh" && Diy_Part1
@@ -135,6 +134,7 @@ jobs:
       env:
          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
 
     - name: 生成配置
       run: |
@@ -202,6 +202,7 @@ jobs:
       run: |
         cd ${GITHUB_WORKSPACE}
         source "${PATH1}/common.sh" && build_openwrt
+
     
     - name: 开始通知
       if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TELE'
