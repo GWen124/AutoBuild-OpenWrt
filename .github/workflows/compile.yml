@@ -26,7 +26,7 @@ jobs:
   build:
     name: 编译 "${{matrix.target}}"
     runs-on: ubuntu-22.04
-    if: ${{ github.event.repository.owner.id == github.event.sender.id }}
+    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
     
     env:
       FOLDER_NAME: ${{ matrix.target }}
@@ -84,8 +84,8 @@ jobs:
 
     - name: 释放空间
       run: |
-        #sudo rm -rf /etc/apt/sources.list.d
-        #sudo bash -c "curl -s https://us.cooluc.com/ubuntu-apt/sources-22.04.list > /etc/apt/sources.list"
+        sudo rm -rf /etc/apt/sources.list.d
+        sudo bash -c "curl -s https://us.cooluc.com/ubuntu-apt/sources-22.04.list > /etc/apt/sources.list"
         sudo swapoff -a
         sudo rm -f /swapfile /mnt/swapfile
         sudo docker image prune -a -f
@@ -104,7 +104,7 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       if: env.WORKFLOW_TOKEN
       run: |
-        # bash <(curl -fsSL https://raw.githubusercontent.com/gw124/AutoBuild-OpenWrt/main/build/common/Custom/ubuntu.sh)
+        # bash <(curl -fsSL https://raw.githubusercontent.com/GWen124/AutoBuild-OpenWrt/main/build/common/Custom/ubuntu.sh)
         sudo sh -c 'echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-17 main" >> /etc/apt/sources.list'
         sudo sh -c 'echo "deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-17 main" >> /etc/apt/sources.list'
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
