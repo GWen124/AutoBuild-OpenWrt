@@ -83,35 +83,15 @@ jobs:
         source build/${{matrix.target}}/common.sh && Diy_variable
 
     - name: 释放空间
-      run: |
-        echo "===== 清理前磁盘状态 ====="
-        df -hT
-
-        echo "===== 停止并清理 Docker（最占空间） ====="
-        sudo systemctl stop docker || true
-        sudo rm -rf /var/lib/docker || true
-
-        echo "===== 清理 GitHub Runner 预装工具 ====="
-        sudo rm -rf /opt/hostedtoolcache || true
-        sudo rm -rf /usr/share/dotnet || true
-        sudo rm -rf /usr/local/lib/android || true
-        sudo rm -rf /opt/ghc || true
-        sudo rm -rf /usr/local/share/powershell || true
-
-        echo "===== 清理 Snap（非常吃空间） ====="
-        sudo rm -rf /var/lib/snapd || true
-        sudo rm -rf /snap || true
-
-        echo "===== 清理 apt 缓存（放后面，避免 exit 28） ====="
-        sudo apt-get clean || true
-        sudo apt-get autoremove -y || true
-
-        echo "===== 清理临时目录 ====="
-        sudo rm -rf /tmp/* || true
-        sudo rm -rf /var/tmp/* || true
-
-        echo "===== 清理后磁盘状态 ====="
-        df -hT
+      uses: coder-xiaomo/free-disk-space@main
+      with:
+        tool-cache: false
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: true  
 
         # sudo systemctl stop docker
         # sudo rm -rf /var/lib/docker
@@ -134,7 +114,7 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       if: env.WORKFLOW_TOKEN
       run: |
-        # bash <(curl -fsSL https://raw.githubusercontent.com/GWen124/AutoBuild-OpenWrt/main/build/common/Custom/ubuntu.sh)
+        # bash <(curl -fsSL https://raw.githubusercontent.com/gw124/AutoBuild-OpenWrt/main/build/common/Custom/ubuntu.sh)
         sudo sh -c 'echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-17 main" >> /etc/apt/sources.list'
         sudo sh -c 'echo "deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-17 main" >> /etc/apt/sources.list'
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
