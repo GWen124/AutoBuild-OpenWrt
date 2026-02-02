@@ -48,9 +48,9 @@ git clone --depth=1 -b master https://github.com/jerrykuku/luci-app-argon-config
 #mosdns
 git clone --depth=1 -b v5 https://github.com/sbwml/luci-app-mosdns package/GWen124/luci-app-mosdns
 #passwall
-#clone_or_update_git_repo https://github.com/xiaorouji/openwrt-passwall package/GWen124/luci-app-passwall main luci-app-passwall
-git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall2 package/GWen124/luci-app-passwall2
-#git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall-packages package/GWen124/luci-app-dependence
+#clone_or_update_git_repo https://github.com/Openwrt-Passwall/openwrt-passwall package/GWen124/luci-app-passwall main luci-app-passwall
+git clone --depth=1 https://github.com/Openwrt-Passwall/openwrt-passwall2 package/GWen124/luci-app-passwall2
+#git clone --depth=1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/GWen124/luci-app-dependence
 git clone --depth=1 https://github.com/jerrykuku/node-request package/GWen124/luci-app-dependence/node-request
 #git clone --depth=1 https://github.com/jerrykuku/lua-maxminddb package/GWen124/luci-app-dependence/lua-maxminddb
 #clone_or_update_git_repo https://github.com/fw876/helloworld package/GWen124/luci-app-dependence/lua-neturl master lua-neturl
