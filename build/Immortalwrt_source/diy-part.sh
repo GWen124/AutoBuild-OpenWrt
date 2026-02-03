@@ -34,7 +34,7 @@ rm -rf temp_lede
 
 #echo 
 #TIME y "自定义固件版本名字"
-#sed -i "s/DISTRIB_DESCRIPTION='.*'/DISTRIB_DESCRIPTION='AutoBuild Firmware Compiled By @GWen124 build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt'/g" package/base-files/files/etc/openwrt_release
+#sed -i "s/DISTRIB_DESCRIPTION='.*'/DISTRIB_DESCRIPTION='AutoBuild Firmware Compiled By @Wen build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt'/g" package/base-files/files/etc/openwrt_release
 
 echo 
 TIME y "调整网络诊断地址到www.baidu.com"
@@ -67,8 +67,8 @@ git clone --depth=1 https://github.com/sbwml/packages_lang_golang feeds/packages
 
 echo
 TIME y "修改dashboard password"
-sed -i '/uci -q set openclash.config.dashboard_password/d' package/GWen124/luci-app-openclash/luci-app-openclash/root/etc/uci-defaults/luci-openclash
-sed -i '/uci add openclash/,/^md5sum /d' package/GWen124/luci-app-openclash/luci-app-openclash/root/etc/uci-defaults/luci-openclash
+sed -i '/uci -q set openclash.config.dashboard_password/d' package/Wen/luci-app-openclash/luci-app-openclash/root/etc/uci-defaults/luci-openclash
+sed -i '/uci add openclash/,/^md5sum /d' package/Wen/luci-app-openclash/luci-app-openclash/root/etc/uci-defaults/luci-openclash
 
 echo
 TIME y "ppp - 2.5.0"
@@ -77,7 +77,7 @@ git clone https://github.com/sbwml/package_network_services_ppp package/network/
 
 echo
 TIME y "添加upx"
-sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host"/"PKG_BUILD_DEPENDS:=golang\/host upx\/host"/g' package/GWen124/luci-app-mosdns/mosdns/Makefile
+sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host"/"PKG_BUILD_DEPENDS:=golang\/host upx\/host"/g' package/Wen/luci-app-mosdns/mosdns/Makefile
 
 # echo
 # TIME y "防火墙4添加自定义nft命令支持"
@@ -130,34 +130,34 @@ find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/PKG_SOURCE_U
 ############################################################################################################################################################
 echo
 TIME b "汉化 调整..."
-sed -i 's/CPU Load/处理器负载/g' package/GWen124/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-rm -rf package/GWen124/luci-app-cpu-status/po/zh_Hans/cpu-status.po
-wget -O package/GWen124/luci-app-cpu-status/po/zh_Hans/cpu-status.po https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/OpenWrt/cpu-status.po
-sed -i "s/'user %'/'用户 %'/g" package/GWen124/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-sed -i "s/'nice %'/'调整优先级 %'/g" package/GWen124/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-sed -i "s/'system %'/'系统 %'/g" package/GWen124/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-sed -i "s/'idle %'/'空闲 %'/g" package/GWen124/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-sed -i "s/'iowait %'/'IO 等待 %'/g" package/GWen124/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-sed -i "s/'irq %'/'硬件中断 %'/g" package/GWen124/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-sed -i "s/'softirq %'/'软中断 %'/g" package/GWen124/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
+sed -i 's/CPU Load/处理器负载/g' package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
+rm -rf package/Wen/luci-app-cpu-status/po/zh_Hans/cpu-status.po
+wget -O package/Wen/luci-app-cpu-status/po/zh_Hans/cpu-status.po https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/OpenWrt/cpu-status.po
+sed -i "s/'user %'/'用户 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
+sed -i "s/'nice %'/'调整优先级 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
+sed -i "s/'system %'/'系统 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
+sed -i "s/'idle %'/'空闲 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
+sed -i "s/'iowait %'/'IO 等待 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
+sed -i "s/'irq %'/'硬件中断 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
+sed -i "s/'softirq %'/'软中断 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
 
 #tn-netports调整
-sed -i '/var title = E.*netports-title/,/);/c\var title = E('"'"'div'"'"', { class: '"'"'netports-title'"'"' }, [\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-buttons'"'"' }, buttons),\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-version'"'"' })\n\t\t\t]);' package/GWen124/luci-app-tn-netports/htdocs/luci-static/resources/netports.js
+sed -i '/var title = E.*netports-title/,/);/c\var title = E('"'"'div'"'"', { class: '"'"'netports-title'"'"' }, [\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-buttons'"'"' }, buttons),\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-version'"'"' })\n\t\t\t]);' package/Wen/luci-app-tn-netports/htdocs/luci-static/resources/netports.js
 #删除首页端口状态
 mv feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js.del
 
 echo
 TIME b "菜单 调整..."
-sed -i 's|/services/|/vpn/|' package/GWen124/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale.json
+sed -i 's|/services/|/vpn/|' package/Wen/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale.json
 sed -i 's|/services/|/control/|' feeds/luci/applications/luci-app-wol/root/usr/share/luci/menu.d/luci-app-wol.json
-sed -i 's/\"services\"/\"control\"/g'  package/GWen124/luci-app-oaf/luci-app-oaf/luasrc/controller/appfilter.lua
+sed -i 's/\"services\"/\"control\"/g'  package/Wen/luci-app-oaf/luci-app-oaf/luasrc/controller/appfilter.lua
 #sed -i 's|/services/|/network/|' feeds/luci/applications/luci-app-nlbwmon/root/usr/share/luci/menu.d/luci-app-nlbwmon.json
 #sed -i 's|/services/|/nas/|' feeds/luci/applications/luci-app-alist/root/usr/share/luci/menu.d/luci-app-alist.json
 sed -i '/"title": "SmartDNS",/a \        "order": 22,' feeds/luci/applications/luci-app-smartdns/root/usr/share/luci/menu.d/luci-app-smartdns.json
-#sed -i '/"title": "Nikki",/a \        "order": -9,' package/GWen124/luci-app-nikki/luci-app-nikki/root/usr/share/luci/menu.d/luci-app-nikki.json
-sed -i 's/("OpenClash"), 50)/("OpenClash"), -10)/g' package/GWen124/luci-app-openclash/luci-app-openclash/luasrc/controller/openclash.lua
-#sed -i 's/("Pass Wall"), -1)/("Pass Wall"), -9)/g' package/GWen124/luci-app-passwall/luasrc/controller/passwall.lua
-sed -i 's/("PassWall 2"), 0)/("PassWall 2"), -8)/g' package/GWen124/luci-app-passwall2/luci-app-passwall2/luasrc/controller/passwall2.lua
+#sed -i '/"title": "Nikki",/a \        "order": -9,' package/Wen/luci-app-nikki/luci-app-nikki/root/usr/share/luci/menu.d/luci-app-nikki.json
+sed -i 's/("OpenClash"), 50)/("OpenClash"), -10)/g' package/Wen/luci-app-openclash/luci-app-openclash/luasrc/controller/openclash.lua
+#sed -i 's/("Pass Wall"), -1)/("Pass Wall"), -9)/g' package/Wen/luci-app-passwall/luasrc/controller/passwall.lua
+sed -i 's/("PassWall 2"), 0)/("PassWall 2"), -8)/g' package/Wen/luci-app-passwall2/luci-app-passwall2/luasrc/controller/passwall2.lua
 sed -i 's/"网络存储"/"存储"/g' `grep "网络存储" -rl ./`
 sed -i 's/"软件包"/"软件管理"/g' `grep "软件包" -rl ./`
 
@@ -167,7 +167,7 @@ echo "重命名系统菜单"
 #status menu
 sed -i 's/"概览"/"系统概览"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"路由"/"路由映射"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
-sed -i 's/"在线用户"/"在线设备"/g' package/GWen124/luci-app-onliner/luasrc/controller/onliner.lua
+sed -i 's/"在线用户"/"在线设备"/g' package/Wen/luci-app-onliner/luasrc/controller/onliner.lua
 #system menu
 #sed -i 's/"系统"/"系统设置"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"管理权"/"权限管理"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
@@ -177,18 +177,18 @@ sed -i 's/"挂载点"/"挂载路径"/g' feeds/luci/modules/luci-base/po/zh_Hans/
 sed -i 's/"启动项"/"启动管理"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"软件包"/"软件管理"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"终端"/"命令终端"/g' feeds/luci/applications/luci-app-ttyd/po/zh_Hans/ttyd.po
-sed -i 's/"Argon 主题设置"/"主题设置"/g' package/GWen124/luci-app-argon-config/po/zh_Hans/argon-config.po
+sed -i 's/"Argon 主题设置"/"主题设置"/g' package/Wen/luci-app-argon-config/po/zh_Hans/argon-config.po
 
 #Argon主题修改
-sed -i 's/(<%= ver.luciversion %>)//g' package/GWen124/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
-sed -i 's/<%= ver.distversion %>/Compiled By @GWen124/g' package/GWen124/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
+sed -i 's/(<%= ver.luciversion %>)//g' package/Wen/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
+sed -i 's/<%= ver.distversion %>/Compiled By @Wen/g' package/Wen/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
 echo "重命名服务菜单"
 
 #services menu
 sed -i 's/"解除网易云音乐播放限制"/"网易音乐"/g' feeds/luci/applications/luci-app-unblockneteasemusic/root/usr/share/luci/menu.d/luci-app-unblockneteasemusic.json
 sed -i 's/"Vlmcsd KMS 服务器"/"KMS服务"/g' $(grep "KMS 服务器" -rl ./)
-#sed -i 's/"短视频下载"/"视频下载"/g' package/GWen124/luci-app-yt-dlp/po/zh_Hans/yt-dlp.po
-sed -i 's/"title": "subconverter"/"title": "节点订阅"/g'  package/GWen124/luci-app-subconverter/luci-app-subconverter/root/usr/share/luci/menu.d/luci-app-subconverter.json
+#sed -i 's/"短视频下载"/"视频下载"/g' package/Wen/luci-app-yt-dlp/po/zh_Hans/yt-dlp.po
+sed -i 's/"title": "subconverter"/"title": "节点订阅"/g'  package/Wen/luci-app-subconverter/luci-app-subconverter/root/usr/share/luci/menu.d/luci-app-subconverter.json
 
 
 
@@ -196,7 +196,7 @@ echo "重命名网络菜单"
 #network
 #sed -i 's/"主机名"/"主机名称"/g' `grep "主机名" -rl ./`
 sed -i 's/"接口"/"网络接口"/g' `grep "接口" -rl ./`
-sed -i 's/"Socat"/"端口转发"/g'  package/GWen124/luci-app-socat/luasrc/controller/socat.lua
+sed -i 's/"Socat"/"端口转发"/g'  package/Wen/luci-app-socat/luasrc/controller/socat.lua
 sed -i 's/DHCP\/DNS/DNS设定/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"USB 打印服务器"/"打印服务"/g' $(grep "USB 打印服务器" -rl ./)
 sed -i "s/set network\.vpn0\.ifname='tun0'/set network.vpn0.device='tun0'/g" feeds/luci/applications/luci-app-openvpn-server/root/etc/uci-defaults/openvpn
@@ -205,11 +205,11 @@ sed -i "s/set network\.vpn0\.ifname='tun0'/set network.vpn0.device='tun0'/g" fee
 
 echo "重命名管控菜单"
 #Control
-sed -i '$a\msgid "Control"\nmsgstr "管控"' package/GWen124/luci-app-oaf/luci-app-oaf/po/zh_Hans/oaf.po
+sed -i '$a\msgid "Control"\nmsgstr "管控"' package/Wen/luci-app-oaf/luci-app-oaf/po/zh_Hans/oaf.po
 
 
 echo "重命名存储菜单"
-sed -i 's/"Alist 文件列表"/"Alist列表"/g' package/GWen124/luci-app-alist/luci-app-alist/po/zh_Hans/alist.po
+sed -i 's/"Alist 文件列表"/"Alist列表"/g' package/Wen/luci-app-alist/luci-app-alist/po/zh_Hans/alist.po
 sed -i 's/"USB 打印服务器"/"打印服务"/g' feeds/luci/applications/luci-app-usb-printer/po/zh_Hans/luci-app-usb-printer.po
 sed -i 's/"FTP 服务器"/"FTP 服务"/g' feeds/luci/applications/luci-app-vsftpd/po/zh_Hans/vsftpd.po
 
@@ -219,10 +219,10 @@ sed -i 's/"Cloudflare 零信任隧道"/"Cloudflare 云隧道"/g' feeds/luci/appl
 sed -i 's/"ZeroTier"/"ZeroTier虚拟网络"/g' feeds/luci/applications/luci-app-zerotier/root/usr/share/luci/menu.d/luci-app-zerotier.json
 sed -i 's/"OpenVPN"/"OpenVPN 客户端"/g' feeds/luci/applications/luci-app-openvpn/luasrc/controller/openvpn.lua
 #sed -i 's/"IPSec VPN Server"/"IPSec VPN 服务器"/g' feeds/luci/applications/luci-app-ipsec-vpnd/root/usr/share/luci/menu.d/luci-app-ipsec-vpnd.json
-sed -i 's/"Tailscale"/"TailScale虚拟网络"/g' package/GWen124/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale.json
+sed -i 's/"Tailscale"/"TailScale虚拟网络"/g' package/Wen/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale.json
 TIME b "重命名 完成"
 
 echo
-chmod -R 755 package/GWen124
+chmod -R 755 package/Wen
 echo
 TIME g "配置更新完成"

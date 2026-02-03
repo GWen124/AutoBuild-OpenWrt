@@ -38,7 +38,7 @@ git clone -b master --depth 1 https://github.com/openwrt/packages.git openwrt_pk
 git clone -b master --depth 1 https://github.com/openwrt/luci.git openwrt_luci_ma
 git clone -b master --depth 1 https://github.com/Lienol/openwrt.git Lienol
 git clone -b main --depth 1 https://github.com/Lienol/openwrt-package Lienol_pkg
-git clone -b js --depth 1 https://github.com/GWen124/OpenWrt-Software.git GWen124_pkg
+git clone -b js --depth 1 https://github.com/GWen124/OpenWrt-Software.git Wen_pkg
 git clone -b master --depth 1 https://github.com/nxhack/openwrt-node-packages.git openwrt-node
 git clone -b packages --depth 1 https://github.com/xiaorouji/openwrt-passwall passwall_pkg
 git clone -b luci-smartdns-new-version --depth 1 https://github.com/xiaorouji/openwrt-passwall passwall_luci

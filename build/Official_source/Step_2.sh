@@ -74,8 +74,8 @@ pushd feeds/luci
 wget -qO- https://github.com/openwrt/luci/commit/471182b2.patch | patch -p1
 popd
 # FullCone PKG
-git clone --depth 1 https://github.com/fullcone-nat-nftables/nft-fullcone package/GWen124/nft-fullcone
-cp -rf ../Lienol/package/network/utils/fullconenat ./package/GWen124/fullconenat
+git clone --depth 1 https://github.com/fullcone-nat-nftables/nft-fullcone package/Wen/nft-fullcone
+cp -rf ../Lienol/package/network/utils/fullconenat ./package/Wen/fullconenat
 
 ### 获取额外的基础软件包 ###
 # 更换为 ImmortalWrt Uboot 以及 Target
@@ -141,20 +141,20 @@ pushd feeds/packages
 wget -qO - https://github.com/openwrt/packages/commit/a09cbcd.patch | patch -p1
 popd
 # AutoCore
-cp -rf ../GWen124_pkg/openwrt-diy/autocore ./package/GWen124/autocore
-sed -i 's/"getTempInfo" /"getTempInfo", "getCPUBench", "getCPUUsage" /g' package/GWen124/autocore/files/generic/luci-mod-status-autocore.json
-sed -i '/"$threads"/d' package/GWen124/autocore/files/x86/autocore
+cp -rf ../Wen_pkg/openwrt-diy/autocore ./package/Wen/autocore
+sed -i 's/"getTempInfo" /"getTempInfo", "getCPUBench", "getCPUUsage" /g' package/Wen/autocore/files/generic/luci-mod-status-autocore.json
+sed -i '/"$threads"/d' package/Wen/autocore/files/x86/autocore
 rm -rf ./feeds/packages/utils/coremark
 cp -rf ../immortalwrt_pkg/utils/coremark ./feeds/packages/utils/coremark
 # Airconnect
-cp -rf ../GWen124_pkg/luci-app-airconnect/airconnect ./package/GWen124/airconnect
-cp -rf ../GWen124_pkg/luci-app-airconnect ./package/GWen124/luci-app-airconnect
-sed -i 's/"AirConnect"/"音频串流"/g' ./package/GWen124/luci-app-airconnect/luasrc/controller/airconnect.lua
+cp -rf ../Wen_pkg/luci-app-airconnect/airconnect ./package/Wen/airconnect
+cp -rf ../Wen_pkg/luci-app-airconnect ./package/Wen/luci-app-airconnect
+sed -i 's/"AirConnect"/"音频串流"/g' ./package/Wen/luci-app-airconnect/luasrc/controller/airconnect.lua
 # luci-app-irqbalance
-cp -rf ../GWen124_pkg/luci-app-irqbalance ./package/GWen124/luci-app-irqbalance
-sed -i 's/"中断均衡器"/"中断均衡"/g' ./package/GWen124/luci-app-irqbalance/po/zh-cn/luci-app-irqbalance.po
+cp -rf ../Wen_pkg/luci-app-irqbalance ./package/Wen/luci-app-irqbalance
+sed -i 's/"中断均衡器"/"中断均衡"/g' ./package/Wen/luci-app-irqbalance/po/zh-cn/luci-app-irqbalance.po
 # AutoUpdate
-git clone https://github.com/gw124/luci-app-autoupdate package/GWen124/luci-app-autoupdate
+git clone https://github.com/gw124/luci-app-autoupdate package/Wen/luci-app-autoupdate
 # 更换 Nodejs 版本
 #rm -rf ./feeds/packages/lang/node
 #cp -rf ../openwrt-node/node ./feeds/packages/lang/node
@@ -176,12 +176,12 @@ git clone https://github.com/gw124/luci-app-autoupdate package/GWen124/luci-app-
 #cp -rf ../openwrt-node/node-serialport-bindings-cpp ./feeds/packages/lang/node-serialport-bindings-cpp
 #ln -sf ../../../feeds/packages/lang/node-serialport-bindings-cpp ./package/feeds/packages/node-serialport-bindings-cpp
 # R8168驱动
-git clone -b master --depth 1 https://github.com/BROBIRD/openwrt-r8168.git package/GWen124/r8168
+git clone -b master --depth 1 https://github.com/BROBIRD/openwrt-r8168.git package/Wen/r8168
 patch -p1 <../PATCH/r8168/r8168-fix_LAN_led-for_r4s-from_TL.patch
 # R8152驱动
-cp -rf ../immortalwrt/package/kernel/r8152 ./package/GWen124/r8152
+cp -rf ../immortalwrt/package/kernel/r8152 ./package/Wen/r8152
 # r8125驱动
-git clone https://github.com/sbwml/package_kernel_r8125 package/GWen124/r8125
+git clone https://github.com/sbwml/package_kernel_r8125 package/Wen/r8125
 # igc-backport
 cp -rf ../PATCH/igc-files-5.10 ./target/linux/x86/files-5.10
 # UPX 可执行软件压缩
@@ -193,18 +193,18 @@ cp -rf ../Lienol/tools/upx ./tools/upx
 rm -rf ./feeds/packages/lang/golang
 cp -rf ../openwrt_pkg_ma/lang/golang ./feeds/packages/lang/golang
 # 访问控制
-cp -rf ../lede_luci/applications/luci-app-accesscontrol ./package/GWen124/luci-app-accesscontrol
-sed -i 's/"上网时间控制"/"时间控制"/g' ./package/GWen124/luci-app-accesscontrol/po/zh-cn/mia.po
-cp -rf ../GWen124_pkg/luci-app-control-weburl ./package/GWen124/luci-app-control-weburl
-cp -rf ../GWen124_pkg/luci-app-control-speedlimit ./package/GWen124/luci-app-control-speedlimit
-cp -rf ../GWen124_pkg/luci-app-control-timewol ./package/GWen124/luci-app-control-timewol
-cp -rf ../GWen124_pkg/luci-app-control-webrestriction ./package/GWen124/luci-app-control-webrestriction
-cp -rf ../GWen124_pkg/luci-app-parentcontrol ./package/GWen124/luci-app-parentcontrol
+cp -rf ../lede_luci/applications/luci-app-accesscontrol ./package/Wen/luci-app-accesscontrol
+sed -i 's/"上网时间控制"/"时间控制"/g' ./package/Wen/luci-app-accesscontrol/po/zh-cn/mia.po
+cp -rf ../Wen_pkg/luci-app-control-weburl ./package/Wen/luci-app-control-weburl
+cp -rf ../Wen_pkg/luci-app-control-speedlimit ./package/Wen/luci-app-control-speedlimit
+cp -rf ../Wen_pkg/luci-app-control-timewol ./package/Wen/luci-app-control-timewol
+cp -rf ../Wen_pkg/luci-app-control-webrestriction ./package/Wen/luci-app-control-webrestriction
+cp -rf ../Wen_pkg/luci-app-parentcontrol ./package/Wen/luci-app-parentcontrol
 # Argon 主题
-git clone -b master --depth 1 https://github.com/jerrykuku/luci-theme-argon.git package/GWen124/luci-theme-argon
-rm -rf ./package/GWen124/luci-theme-argon/htdocs/luci-static/argon/background/README.md
-git clone -b master --depth 1 https://github.com/jerrykuku/luci-app-argon-config.git package/GWen124/luci-app-argon-config
-sed -i 's/"Argon 主题设置"/"主题设置"/g' ./package/GWen124/luci-app-argon-config/luasrc/controller/argon-config.lua
+git clone -b master --depth 1 https://github.com/jerrykuku/luci-theme-argon.git package/Wen/luci-theme-argon
+rm -rf ./package/Wen/luci-theme-argon/htdocs/luci-static/argon/background/README.md
+git clone -b master --depth 1 https://github.com/jerrykuku/luci-app-argon-config.git package/Wen/luci-app-argon-config
+sed -i 's/"Argon 主题设置"/"主题设置"/g' ./package/Wen/luci-app-argon-config/luasrc/controller/argon-config.lua
 # MAC 地址与 IP 绑定
 cp -rf ../immortalwrt_luci/applications/luci-app-arpbind ./feeds/luci/applications/luci-app-arpbind
 sed -i 's/"IP\/MAC 绑定"/"地址绑定"/g' ./feeds/luci/applications/luci-app-arpbind/po/zh_Hans/arpbind.po
@@ -237,16 +237,16 @@ sed -i 's,2016,2208,g' feeds/luci/applications/luci-app-cpufreq/root/etc/uci-def
 sed -i 's,1512,1608,g' feeds/luci/applications/luci-app-cpufreq/root/etc/uci-defaults/10-cpufreq
 rm -rf ./feeds/luci/applications/luci-app-cpulimit
 rm -rf ./feeds/packages/utils/miniupnpd
-cp -rf ../immortalwrt_luci/applications/luci-app-cpulimit ./package/GWen124/luci-app-cpulimit
-sed -i 's/"CPU占用率限制"/"CPU限制"/g' ./package/GWen124/luci-app-cpulimit/po/zh_Hans/cpulimit.po
+cp -rf ../immortalwrt_luci/applications/luci-app-cpulimit ./package/Wen/luci-app-cpulimit
+sed -i 's/"CPU占用率限制"/"CPU限制"/g' ./package/Wen/luci-app-cpulimit/po/zh_Hans/cpulimit.po
 cp -rf ../immortalwrt_pkg/utils/cpulimit ./feeds/packages/utils/cpulimit
 ln -sf ../../../feeds/packages/utils/cpulimit ./package/feeds/packages/cpulimit
 # 动态DNS
 rm -rf ./feeds/luci/applications/luci-app-ddns
-svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-ddns package/GWen124/luci-app-ddns
-sed -i 's/+ddns-scripts-aliyun/+ddns-scripts_aliyun/g' ./package/GWen124/luci-app-ddns/Makefile
-sed -i 's/+ddns-scripts-dnspod/+ddns-scripts_dnspod/g' ./package/GWen124/luci-app-ddns/Makefile
-sed -i 's/+ddns-scripts-cloudflare//g' ./package/GWen124/luci-app-ddns/Makefile
+svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-ddns package/Wen/luci-app-ddns
+sed -i 's/+ddns-scripts-aliyun/+ddns-scripts_aliyun/g' ./package/Wen/luci-app-ddns/Makefile
+sed -i 's/+ddns-scripts-dnspod/+ddns-scripts_dnspod/g' ./package/Wen/luci-app-ddns/Makefile
+sed -i 's/+ddns-scripts-cloudflare//g' ./package/Wen/luci-app-ddns/Makefile
 sed -i '/boot()/,+2d' feeds/packages/net/ddns-scripts/files/etc/init.d/ddns
 cp -rf ../openwrt-third/ddns-scripts_aliyun ./feeds/packages/net/ddns-scripts_aliyun
 ln -sf ../../../feeds/packages/net/ddns-scripts_aliyun ./package/feeds/packages/ddns-scripts_aliyun
@@ -267,45 +267,45 @@ sed -i '/sysctl.d/d' feeds/packages/utils/dockerd/Makefile
 rm -rf ./feeds/luci/collections/luci-lib-docker
 cp -rf ../docker_lib/collections/luci-lib-docker ./feeds/luci/collections/luci-lib-docker
 # DiskMan
-cp -rf ../diskman/applications/luci-app-diskman ./package/GWen124/luci-app-diskman
-mkdir -p package/GWen124/parted && \
-wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -O package/GWen124/parted/Makefile
+cp -rf ../diskman/applications/luci-app-diskman ./package/Wen/luci-app-diskman
+mkdir -p package/Wen/parted && \
+wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -O package/Wen/parted/Makefile
 # IPSec
-cp -rf ../lede_luci/applications/luci-app-ipsec-server ./package/GWen124/luci-app-ipsec-server
+cp -rf ../lede_luci/applications/luci-app-ipsec-server ./package/Wen/luci-app-ipsec-server
 # OVPN
-cp -rf ../openwrt_luci_ma/applications/luci-app-openvpn ./package/GWen124/luci-app-openvpn
-cp -rf ../GWen124_pkg/luci-app-openvpn-server ./package/GWen124/luci-app-openvpn-server
+cp -rf ../openwrt_luci_ma/applications/luci-app-openvpn ./package/Wen/luci-app-openvpn
+cp -rf ../Wen_pkg/luci-app-openvpn-server ./package/Wen/luci-app-openvpn-server
 # IPv6 兼容助手
-cp -rf ../lede/package/lean/ipv6-helper ./package/GWen124/ipv6-helper
+cp -rf ../lede/package/lean/ipv6-helper ./package/Wen/ipv6-helper
 # Mosdns
-cp -rf ../mosdns/mosdns ./package/GWen124/mosdns
-cp -rf ../mosdns/luci-app-mosdns ./package/GWen124/luci-app-mosdns
-cp -rf ../mosdns/v2dat ./package/GWen124/v2dat
-sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host"/"PKG_BUILD_DEPENDS:=golang\/host upx\/host"/g' package/GWen124/mosdns/Makefile
+cp -rf ../mosdns/mosdns ./package/Wen/mosdns
+cp -rf ../mosdns/luci-app-mosdns ./package/Wen/luci-app-mosdns
+cp -rf ../mosdns/v2dat ./package/Wen/v2dat
+sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host"/"PKG_BUILD_DEPENDS:=golang\/host upx\/host"/g' package/Wen/mosdns/Makefile
 # 流量监管
-cp -rf ../lede_luci/applications/luci-app-netdata ./package/GWen124/luci-app-netdata
+cp -rf ../lede_luci/applications/luci-app-netdata ./package/Wen/luci-app-netdata
 # 上网 APP 过滤
-git clone -b master --depth 1 https://github.com/destan19/OpenAppFilter.git package/GWen124/OpenAppFilter
-pushd package/GWen124/OpenAppFilter
+git clone -b master --depth 1 https://github.com/destan19/OpenAppFilter.git package/Wen/OpenAppFilter
+pushd package/Wen/OpenAppFilter
 wget -qO - https://github.com/QiuSimons/OpenAppFilter-destan19/commit/9088cc2.patch | patch -p1
 wget https://destan19.github.io/assets/oaf/open_feature/feature-cn-22-06-21.cfg -O ./open-app-filter/files/feature.cfg
 popd
 # Passwall
-cp -rf ../passwall_luci/luci-app-passwall ./package/GWen124/luci-app-passwall
-pushd package/GWen124/luci-app-passwall
+cp -rf ../passwall_luci/luci-app-passwall ./package/Wen/luci-app-passwall
+pushd package/Wen/luci-app-passwall
 sed -i 's,iptables-legacy,iptables-nft,g' Makefile
 popd
-cp -rf ../passwall_pkg/tcping ./package/GWen124/tcping
-cp -rf ../passwall_pkg/chinadns-ng ./package/GWen124/chinadns-ng
-cp -rf ../passwall_pkg/trojan-go ./package/GWen124/trojan-go
-cp -rf ../passwall_pkg/brook ./package/GWen124/brook
-cp -rf ../passwall_pkg/ssocks ./package/GWen124/ssocks
-cp -rf ../passwall_pkg/microsocks ./package/GWen124/microsocks
-cp -rf ../passwall_pkg/dns2socks ./package/GWen124/dns2socks
-cp -rf ../passwall_pkg/ipt2socks ./package/GWen124/ipt2socks
-cp -rf ../passwall_pkg/pdnsd-alt ./package/GWen124/pdnsd-alt
-cp -rf ../passwall_pkg/trojan-plus ./package/GWen124/trojan-plus
-cp -rf ../passwall_pkg/xray-plugin ./package/GWen124/xray-plugin
+cp -rf ../passwall_pkg/tcping ./package/Wen/tcping
+cp -rf ../passwall_pkg/chinadns-ng ./package/Wen/chinadns-ng
+cp -rf ../passwall_pkg/trojan-go ./package/Wen/trojan-go
+cp -rf ../passwall_pkg/brook ./package/Wen/brook
+cp -rf ../passwall_pkg/ssocks ./package/Wen/ssocks
+cp -rf ../passwall_pkg/microsocks ./package/Wen/microsocks
+cp -rf ../passwall_pkg/dns2socks ./package/Wen/dns2socks
+cp -rf ../passwall_pkg/ipt2socks ./package/Wen/ipt2socks
+cp -rf ../passwall_pkg/pdnsd-alt ./package/Wen/pdnsd-alt
+cp -rf ../passwall_pkg/trojan-plus ./package/Wen/trojan-plus
+cp -rf ../passwall_pkg/xray-plugin ./package/Wen/xray-plugin
 # Passwall 白名单
 echo '
 teamviewer.com
@@ -319,50 +319,50 @@ checkipv6.synology.com
 ntp.aliyun.com
 cn.ntp.org.cn
 ntp.ntsc.ac.cn
-' >>./package/GWen124/luci-app-passwall/root/usr/share/passwall/rules/direct_host
+' >>./package/Wen/luci-app-passwall/root/usr/share/passwall/rules/direct_host
 # Passwall2
-cp -rf ../passwall2_luci/luci-app-passwall2 ./package/GWen124/luci-app-passwall2
-sed -i 's/"PassWall 2"/"PassWall+"/g' ./package/GWen124/luci-app-passwall2/luasrc/controller/passwall2.lua
+cp -rf ../passwall2_luci/luci-app-passwall2 ./package/Wen/luci-app-passwall2
+sed -i 's/"PassWall 2"/"PassWall+"/g' ./package/Wen/luci-app-passwall2/luasrc/controller/passwall2.lua
 # 清理内存
-cp -rf ../lede_luci/applications/luci-app-ramfree ./package/GWen124/luci-app-ramfree
+cp -rf ../lede_luci/applications/luci-app-ramfree ./package/Wen/luci-app-ramfree
 # ServerChan 微信推送
-# git clone -b master --depth 1 https://github.com/tty228/luci-app-serverchan.git package/GWen124/luci-app-serverchan
+# git clone -b master --depth 1 https://github.com/tty228/luci-app-serverchan.git package/Wen/luci-app-serverchan
 # Pushbot 推送
-cp -rf ../lede_luci/applications/luci-app-pushbot ./package/GWen124/luci-app-pushbot
+cp -rf ../lede_luci/applications/luci-app-pushbot ./package/Wen/luci-app-pushbot
 # ShadowsocksR Plus+ 依赖
 rm -rf ./feeds/packages/net/shadowsocks-libev
-cp -rf ../lede_pkg/net/shadowsocks-libev ./package/GWen124/shadowsocks-libev
-cp -rf ../ssrp/redsocks2 ./package/GWen124/redsocks2
-cp -rf ../ssrp/trojan ./package/GWen124/trojan
-cp -rf ../ssrp/dns2tcp ./package/GWen124/dns2tcp
-cp -rf ../ssrp/gn ./package/GWen124/gn
-cp -rf ../ssrp/shadowsocksr-libev ./package/GWen124/shadowsocksr-libev
-cp -rf ../ssrp/simple-obfs ./package/GWen124/simple-obfs
-cp -rf ../ssrp/naiveproxy ./package/GWen124/naiveproxy
-cp -rf ../ssrp/v2ray-core ./package/GWen124/v2ray-core
-cp -rf ../ssrp/hysteria ./package/GWen124/hysteria
-#cp -rf ../ssrp/sagernet-core ./package/GWen124/sagernet-core
+cp -rf ../lede_pkg/net/shadowsocks-libev ./package/Wen/shadowsocks-libev
+cp -rf ../ssrp/redsocks2 ./package/Wen/redsocks2
+cp -rf ../ssrp/trojan ./package/Wen/trojan
+cp -rf ../ssrp/dns2tcp ./package/Wen/dns2tcp
+cp -rf ../ssrp/gn ./package/Wen/gn
+cp -rf ../ssrp/shadowsocksr-libev ./package/Wen/shadowsocksr-libev
+cp -rf ../ssrp/simple-obfs ./package/Wen/simple-obfs
+cp -rf ../ssrp/naiveproxy ./package/Wen/naiveproxy
+cp -rf ../ssrp/v2ray-core ./package/Wen/v2ray-core
+cp -rf ../ssrp/hysteria ./package/Wen/hysteria
+#cp -rf ../ssrp/sagernet-core ./package/Wen/sagernet-core
 rm -rf ./feeds/packages/net/xray-core
-cp -rf ../ssrp/xray-core ./package/GWen124/xray-core
-cp -rf ../ssrp/v2ray-plugin ./package/GWen124/v2ray-plugin
-cp -rf ../ssrp/shadowsocks-rust ./package/GWen124/shadowsocks-rust
-cp -rf ../ssrp/lua-neturl ./package/GWen124/lua-neturl
+cp -rf ../ssrp/xray-core ./package/Wen/xray-core
+cp -rf ../ssrp/v2ray-plugin ./package/Wen/v2ray-plugin
+cp -rf ../ssrp/shadowsocks-rust ./package/Wen/shadowsocks-rust
+cp -rf ../ssrp/lua-neturl ./package/Wen/lua-neturl
 rm -rf ./feeds/packages/net/kcptun
 cp -rf ../immortalwrt_pkg/net/kcptun ./feeds/packages/net/kcptun
 ln -sf ../../../feeds/packages/net/kcptun ./package/feeds/packages/kcptun
 # ShadowsocksR Plus+
-cp -rf ../ssrp/luci-app-ssr-plus ./package/GWen124/luci-app-ssr-plus
-sed -i 's/ShadowSocksR Plus+/SSRPlus+/g' package/GWen124/luci-app-ssr-plus/luasrc/controller/shadowsocksr.lua
-rm -rf ./package/GWen124/luci-app-ssr-plus/po/zh_Hans
-pushd package/GWen124
+cp -rf ../ssrp/luci-app-ssr-plus ./package/Wen/luci-app-ssr-plus
+sed -i 's/ShadowSocksR Plus+/SSRPlus+/g' package/Wen/luci-app-ssr-plus/luasrc/controller/shadowsocksr.lua
+rm -rf ./package/Wen/luci-app-ssr-plus/po/zh_Hans
+pushd package/Wen
 wget -qO - https://github.com/fw876/helloworld/commit/5bbf6e7.patch | patch -p1
 popd
-pushd package/GWen124/luci-app-ssr-plus
+pushd package/Wen/luci-app-ssr-plus
 sed -i '/Clang.CN.CIDR/a\o:value("https://gh.404delivr.workers.dev/https://github.com/QiuSimons/Chnroute/raw/master/dist/chnroute/chnroute.txt", translate("QiuSimons/Chnroute"))' luasrc/model/cbi/shadowsocksr/advanced.lua
 popd
 # socat
-cp -rf ../Lienol_pkg/luci-app-socat ./package/GWen124/luci-app-socat
-sed -i 's/"Socat"/"IPv6转发"/g'  ./package/GWen124/luci-app-socat/luasrc/controller/socat.lua
+cp -rf ../Lienol_pkg/luci-app-socat ./package/Wen/luci-app-socat
+sed -i 's/"Socat"/"IPv6转发"/g'  ./package/Wen/luci-app-socat/luasrc/controller/socat.lua
 sed -i '/socat\.config/d' feeds/packages/net/socat/Makefile
 # 订阅转换
 cp -rf ../immortalwrt_pkg/net/subconverter ./feeds/packages/net/subconverter
@@ -378,30 +378,30 @@ ln -sf ../../../feeds/packages/libs/quickjspp ./package/feeds/packages/quickjspp
 cp -rf ../immortalwrt_pkg/libs/toml11 ./feeds/packages/libs/toml11
 ln -sf ../../../feeds/packages/libs/toml11 ./package/feeds/packages/toml11
 # 网易云音乐解锁
-git clone -b js --depth 1 https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git package/GWen124/UnblockNeteaseMusic
-sed -i 's/"解除网易云音乐播放限制"/"网易音乐"/g' ./package/GWen124/UnblockNeteaseMusic/root/usr/share/luci/menu.d/luci-app-unblockneteasemusic.json
+git clone -b js --depth 1 https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git package/Wen/UnblockNeteaseMusic
+sed -i 's/"解除网易云音乐播放限制"/"网易音乐"/g' ./package/Wen/UnblockNeteaseMusic/root/usr/share/luci/menu.d/luci-app-unblockneteasemusic.json
 # rpcd
 sed -i 's/option timeout 30/option timeout 60/g' package/system/rpcd/files/rpcd.config
 sed -i 's#20) \* 1000#60) \* 1000#g' feeds/luci/modules/luci-base/htdocs/luci-static/resources/rpc.js
 # USB 打印机
-cp -rf ../lede_luci/applications/luci-app-usb-printer ./package/GWen124/luci-app-usb-printer
-sed -i 's/"USB 打印服务器"/"打印服务"/g' ./package/GWen124/luci-app-usb-printer/po/zh-cn/usb-printer.po
+cp -rf ../lede_luci/applications/luci-app-usb-printer ./package/Wen/luci-app-usb-printer
+sed -i 's/"USB 打印服务器"/"打印服务"/g' ./package/Wen/luci-app-usb-printer/po/zh-cn/usb-printer.po
 # UU加速器
-# cp -rf ../lede_luci/applications/luci-app-uugamebooster ./package/GWen124/luci-app-uugamebooster
-# cp -rf ../lede_pkg/net/uugamebooster ./package/GWen124/uugamebooster
+# cp -rf ../lede_luci/applications/luci-app-uugamebooster ./package/Wen/luci-app-uugamebooster
+# cp -rf ../lede_pkg/net/uugamebooster ./package/Wen/uugamebooster
 # VSSR
-git clone -b master --depth 1 https://github.com/jerrykuku/luci-app-vssr.git package/GWen124/luci-app-vssr
-sed -i 's/Hello World/VssrVPN/g' ./package/GWen124/luci-app-vssr/luasrc/controller/vssr.lua
-git clone -b master --depth 1 https://github.com/jerrykuku/lua-maxminddb.git package/GWen124/lua-maxminddb
+git clone -b master --depth 1 https://github.com/jerrykuku/luci-app-vssr.git package/Wen/luci-app-vssr
+sed -i 's/Hello World/VssrVPN/g' ./package/Wen/luci-app-vssr/luasrc/controller/vssr.lua
+git clone -b master --depth 1 https://github.com/jerrykuku/lua-maxminddb.git package/Wen/lua-maxminddb
 # 网络唤醒
-cp -rf ../zxlhhyccc/zxlhhyccc/luci-app-wolplus ./package/GWen124/luci-app-wolplus
+cp -rf ../zxlhhyccc/zxlhhyccc/luci-app-wolplus ./package/Wen/luci-app-wolplus
 # 流量监视
-git clone -b master --depth 1 https://github.com/brvphoenix/wrtbwmon.git package/GWen124/wrtbwmon
-git clone -b master --depth 1 https://github.com/brvphoenix/luci-app-wrtbwmon.git package/GWen124/luci-app-wrtbwmon
+git clone -b master --depth 1 https://github.com/brvphoenix/wrtbwmon.git package/Wen/wrtbwmon
+git clone -b master --depth 1 https://github.com/brvphoenix/luci-app-wrtbwmon.git package/Wen/luci-app-wrtbwmon
 # Zerotier
 cp -rf ../immortalwrt_luci/applications/luci-app-zerotier ./feeds/luci/applications/luci-app-zerotier
 sed -i 's/msgstr ""/msgstr "ZeroTier虚拟网络"/g' ./feeds/luci/applications/luci-app-zerotier/po/zh_Hans/zerotier.po
-#cp -rf ../GWen124_pkg/move_2_services.sh ./feeds/luci/applications/luci-app-zerotier/move_2_services.sh
+#cp -rf ../Wen_pkg/move_2_services.sh ./feeds/luci/applications/luci-app-zerotier/move_2_services.sh
 #chmod -R 755 ./feeds/luci/applications/luci-app-zerotier/move_2_services.sh
 pushd feeds/luci/applications/luci-app-zerotier
 #bash move_2_services.sh
@@ -412,43 +412,43 @@ cp -rf ../immortalwrt_pkg/net/zerotier ./feeds/packages/net/zerotier
 # jq
 sed -i 's,9625784cf2e4fd9842f1d407681ce4878b5b0dcddbcd31c6135114a30c71e6a8,skip,g' feeds/packages/utils/jq/Makefile
 # 中文编译及功能优化
-cp -rf ../GWen124_pkg/openwrt-diy/addition-trans-zh ./package/GWen124/addition-trans-zh
-sed -i 's,iptables-mod-fullconenat,iptables-nft +kmod-nft-fullcone,g' package/GWen124/addition-trans-zh/Makefile
+cp -rf ../Wen_pkg/openwrt-diy/addition-trans-zh ./package/Wen/addition-trans-zh
+sed -i 's,iptables-mod-fullconenat,iptables-nft +kmod-nft-fullcone,g' package/Wen/addition-trans-zh/Makefile
 # 高级设置
-cp -rf ../GWen124_pkg/luci-app-advanced ./package/GWen124/luci-app-advanced
+cp -rf ../Wen_pkg/luci-app-advanced ./package/Wen/luci-app-advanced
 # Alist
-git clone -b master --depth 1 https://github.com/sbwml/luci-app-alist package/GWen124/luci-app-alist
-sed -i 's/"Alist 文件列表"/"Alist列表"/g' ./package/GWen124/luci-app-alist/luci-app-alist/po/zh-cn/alist.po
-sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host"/"PKG_BUILD_DEPENDS:=golang\/host upx\/host"/g' package/GWen124/luci-app-alist/alist/Makefile
+git clone -b master --depth 1 https://github.com/sbwml/luci-app-alist package/Wen/luci-app-alist
+sed -i 's/"Alist 文件列表"/"Alist列表"/g' ./package/Wen/luci-app-alist/luci-app-alist/po/zh-cn/alist.po
+sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host"/"PKG_BUILD_DEPENDS:=golang\/host upx\/host"/g' package/Wen/luci-app-alist/alist/Makefile
 # 定时设置
-cp -rf ../GWen124_pkg/luci-app-autotimeset ./package/GWen124/luci-app-autotimeset
+cp -rf ../Wen_pkg/luci-app-autotimeset ./package/Wen/luci-app-autotimeset
 # Bypass
-cp -rf ../GWen124_pkg/luci-app-bypass ./package/GWen124/luci-app-bypass
+cp -rf ../Wen_pkg/luci-app-bypass ./package/Wen/luci-app-bypass
 # CloudSpeedTest优选IP
-cp -rf ../GWen124_pkg/luci-app-cloudflarespeedtest ./package/GWen124/luci-app-cloudflarespeedtest
-sed -i 's/"Cloudflare速度测试"/"Cloudflare"/g' ./package/GWen124/luci-app-cloudflarespeedtest/po/zh-cn/cloudflarespeedtest.po
+cp -rf ../Wen_pkg/luci-app-cloudflarespeedtest ./package/Wen/luci-app-cloudflarespeedtest
+sed -i 's/"Cloudflare速度测试"/"Cloudflare"/g' ./package/Wen/luci-app-cloudflarespeedtest/po/zh-cn/cloudflarespeedtest.po
 # 文件管理器
-cp -rf ../GWen124_pkg/luci-app-fileassistant ./package/GWen124/luci-app-fileassistant
+cp -rf ../Wen_pkg/luci-app-fileassistant ./package/Wen/luci-app-fileassistant
 # 宽带测速
-cp -rf ../GWen124_pkg/luci-app-netspeedtest ./package/GWen124/luci-app-netspeedtest
-sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host homebox\/host"/"PKG_BUILD_DEPENDS:=golang\/host homebox\/host upx\/host"/g' package/GWen124/luci-app-netspeedtest/homebox/Makefile
+cp -rf ../Wen_pkg/luci-app-netspeedtest ./package/Wen/luci-app-netspeedtest
+sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host homebox\/host"/"PKG_BUILD_DEPENDS:=golang\/host homebox\/host upx\/host"/g' package/Wen/luci-app-netspeedtest/homebox/Makefile
 # 组播路由
-cp -rf ../GWen124_pkg/luci-app-msd_lite ./package/GWen124/luci-app-msd_lite
-sed -i 's/"MultiSD_Lite"/"组播路由"/g'  ./package/GWen124/luci-app-msd_lite/luasrc/controller/msd_lite.lua
-cp -rf ../GWen124_pkg/luci-app-dependence/msd_lite ./package/GWen124/msd_lite
+cp -rf ../Wen_pkg/luci-app-msd_lite ./package/Wen/luci-app-msd_lite
+sed -i 's/"MultiSD_Lite"/"组播路由"/g'  ./package/Wen/luci-app-msd_lite/luasrc/controller/msd_lite.lua
+cp -rf ../Wen_pkg/luci-app-dependence/msd_lite ./package/Wen/msd_lite
 # 在线设备
-cp -rf ../GWen124_pkg/luci-app-onliner ./package/GWen124/luci-app-onliner
+cp -rf ../Wen_pkg/luci-app-onliner ./package/Wen/luci-app-onliner
 # 设备信息监控
-cp -rf ../lede_pkg/utils/smartmontools ./package/GWen124/smartmontools
-cp -rf ../GWen124_pkg/luci-app-smartinfo ./package/GWen124/luci-app-smartinfo
+cp -rf ../lede_pkg/utils/smartmontools ./package/Wen/smartmontools
+cp -rf ../Wen_pkg/luci-app-smartinfo ./package/Wen/luci-app-smartinfo
 # 网络接口图标
-cp -rf ../GWen124_pkg/luci-app-tn-netports ./package/GWen124/luci-app-tn-netports
+cp -rf ../Wen_pkg/luci-app-tn-netports ./package/Wen/luci-app-tn-netports
 # TurboACC
-#cp -rf ../GWen124_pkg/luci-app-turboacc ./package/GWen124/luci-app-turboacc
-#sed -i 's/"Turbo ACC 网络加速"/"网络加速"/g' ./package/GWen124/luci-app-turboacc/po/zh-cn/turboacc.po
-#cp -rf ../GWen124_pkg/luci-app-dependence/shortcut-fe ./package/GWen124/shortcut-fe
-#cp -rf ../GWen124_pkg/luci-app-dependence/dnsforwarder ./package/GWen124/dnsforwarder
-#cp -rf ../lede_pkg/net/dnsproxy ./package/GWen124/dnsproxy
+#cp -rf ../Wen_pkg/luci-app-turboacc ./package/Wen/luci-app-turboacc
+#sed -i 's/"Turbo ACC 网络加速"/"网络加速"/g' ./package/Wen/luci-app-turboacc/po/zh-cn/turboacc.po
+#cp -rf ../Wen_pkg/luci-app-dependence/shortcut-fe ./package/Wen/shortcut-fe
+#cp -rf ../Wen_pkg/luci-app-dependence/dnsforwarder ./package/Wen/dnsforwarder
+#cp -rf ../lede_pkg/net/dnsproxy ./package/Wen/dnsproxy
 #Others Menu Modify
 sed -i 's/"Web 管理"/"Web管理"/g' `grep "Web 管理" -rl ./`
 sed -i 's/"备份\/升级"/"备份升级"/g' `grep "备份\/升级" -rl ./`

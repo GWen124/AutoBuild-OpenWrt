@@ -25,8 +25,8 @@ TIME() {
 
 echo 
 TIME y "自定义固件版本名字"
-# sed -i "s/'LEDE ' /AutoBuild Firmware Compiled By @GWen124 build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ
-sed -i "s/DISTRIB_DESCRIPTION=' *LEDE *'/DISTRIB_DESCRIPTION='AutoBuild Firmware Compiled By @GWen124 '/" $ZZZ
+# sed -i "s/'LEDE ' /AutoBuild Firmware Compiled By @Wen build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ
+sed -i "s/DISTRIB_DESCRIPTION=' *LEDE *'/DISTRIB_DESCRIPTION='AutoBuild Firmware Compiled By @Wen '/" $ZZZ
 sed -i "s/DISTRIB_REVISION='R24.10.24'/DISTRIB_REVISION='Build $(TZ=UTC-8 date "+%Y.%m.%d") '/" $ZZZ
 
 echo 
@@ -58,7 +58,7 @@ sed -i '/customized in this file/a net.netfilter.nf_conntrack_max=165535' packag
 
 echo 
 TIME y "下载UnblockNeteaseMusic内核"
-NAME=$"package/GWen124/luci-app-unblockneteasemusic/root/usr/share/unblockneteasemusic" && mkdir -p $NAME/core
+NAME=$"package/Wen/luci-app-unblockneteasemusic/root/usr/share/unblockneteasemusic" && mkdir -p $NAME/core
 curl 'https://api.github.com/repos/UnblockNeteaseMusic/server/commits?sha=enhanced&path=precompiled' -o commits.json
 echo "$(grep sha commits.json | sed -n "1,1p" | cut -c 13-52)">"$NAME/core_local_ver"
 curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/precompiled/app.js -o $NAME/core/app.js
@@ -69,8 +69,8 @@ curl -L https://github.com/UnblockNeteaseMusic/server/raw/enhanced/server.key -o
 
 echo
 TIME y "修改dashboard password"
-sed -i '/uci -q set openclash.config.dashboard_password/d' package/GWen124/luci-app-openclash/luci-app-openclash/root/etc/uci-defaults/luci-openclash
-sed -i '/uci add openclash/,/^md5sum /d' package/GWen124/luci-app-openclash/luci-app-openclash/root/etc/uci-defaults/luci-openclash
+sed -i '/uci -q set openclash.config.dashboard_password/d' package/Wen/luci-app-openclash/luci-app-openclash/root/etc/uci-defaults/luci-openclash
+sed -i '/uci add openclash/,/^md5sum /d' package/Wen/luci-app-openclash/luci-app-openclash/root/etc/uci-defaults/luci-openclash
 
 echo
 TIME y "更换golang版本"
@@ -85,16 +85,16 @@ git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/l
 
 echo
 TIME y "添加upx"
-#sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host homebox\/host"/"PKG_BUILD_DEPENDS:=golang\/host homebox\/host upx\/host"/g' package/GWen124/luci-app-netspeedtest/homebox/Makefile
-sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host"/"PKG_BUILD_DEPENDS:=golang\/host upx\/host"/g' package/GWen124/luci-app-mosdns/mosdns/Makefile
+#sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host homebox\/host"/"PKG_BUILD_DEPENDS:=golang\/host homebox\/host upx\/host"/g' package/Wen/luci-app-netspeedtest/homebox/Makefile
+sed -i 's/"PKG_BUILD_DEPENDS:=golang\/host"/"PKG_BUILD_DEPENDS:=golang\/host upx\/host"/g' package/Wen/luci-app-mosdns/mosdns/Makefile
 
 echo
 TIME b "汉化 调整..."
-sed -i 's/CPU Load/处理器负载/g' package/GWen124/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-rm -rf package/GWen124/luci-app-cpu-status/po/zh_Hans/cpu-status.po
-wget -O package/GWen124/luci-app-cpu-status/po/zh_Hans/cpu-status.po https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/OpenWrt/cpu-status.po
+sed -i 's/CPU Load/处理器负载/g' package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
+rm -rf package/Wen/luci-app-cpu-status/po/zh_Hans/cpu-status.po
+wget -O package/Wen/luci-app-cpu-status/po/zh_Hans/cpu-status.po https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/OpenWrt/cpu-status.po
 #tn-netports调整
-sed -i '/var title = E.*netports-title/,/);/c\var title = E('"'"'div'"'"', { class: '"'"'netports-title'"'"' }, [\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-buttons'"'"' }, buttons),\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-version'"'"' })\n\t\t\t]);' package/GWen124/luci-app-tn-netports/htdocs/luci-static/resources/netports.js
+sed -i '/var title = E.*netports-title/,/);/c\var title = E('"'"'div'"'"', { class: '"'"'netports-title'"'"' }, [\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-buttons'"'"' }, buttons),\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-version'"'"' })\n\t\t\t]);' package/Wen/luci-app-tn-netports/htdocs/luci-static/resources/netports.js
 ################################################################################################################
 echo
 TIME b "菜单 调整..."
@@ -108,7 +108,7 @@ sed -i 's|/services/|/network/|' feeds/luci/applications/luci-app-upnp/root/usr/
 #优先级
 sed -i 's/("Pass Wall"), -1)/("Pass Wall"), -9)/g' feeds/luci/applications/luci-app-passwall/luasrc/controller/passwall.lua
 sed -i 's/("PassWall 2"), 0)/("PassWall 2"), -8)/g' feeds/luci/applications/luci-app-passwall2/luasrc/controller/passwall2.lua
-sed -i 's/("OpenClash"), 50)/("OpenClash"), -10)/g' package/GWen124/luci-app-openclash/luci-app-openclash/luasrc/controller/openclash.lua
+sed -i 's/("OpenClash"), 50)/("OpenClash"), -10)/g' package/Wen/luci-app-openclash/luci-app-openclash/luasrc/controller/openclash.lua
 sed -i 's/"title": "SmartDNS",/"title": "SmartDNS","order": -5,/' feeds/luci/applications/luci-app-smartdns/root/usr/share/luci/menu.d/luci-app-smartdns.json
 echo "重命名系统菜单..."
 sed -i 's/"概览"/"系统概览"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
@@ -120,11 +120,11 @@ sed -i 's/"挂载点"/"挂载路径"/g' feeds/luci/modules/luci-base/po/zh_Hans/
 sed -i 's/"启动项"/"启动管理"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"软件包"/"软件管理"/g' $(grep "软件包" -rl ./)
 sed -i 's/"终端"/"命令终端"/g' feeds/luci/applications/luci-app-ttyd/po/zh_Hans/ttyd.po
-sed -i 's/"在线用户"/"在线设备"/g' package/GWen124/luci-app-onliner/luasrc/controller/onliner.lua
-sed -i 's/"Argon 主题设置"/"主题设置"/g' package/GWen124/luci-app-argon-config/po/zh_Hans/argon-config.po
+sed -i 's/"在线用户"/"在线设备"/g' package/Wen/luci-app-onliner/luasrc/controller/onliner.lua
+sed -i 's/"Argon 主题设置"/"主题设置"/g' package/Wen/luci-app-argon-config/po/zh_Hans/argon-config.po
 #Argon主题修改
-sed -i 's/(<%= ver.luciversion %>)//g' package/GWen124/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
-sed -i 's/<%= ver.distversion %>/Compiled By @GWen124/g' package/GWen124/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
+sed -i 's/(<%= ver.luciversion %>)//g' package/Wen/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
+sed -i 's/<%= ver.distversion %>/Compiled By @Wen/g' package/Wen/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
 
 # 重命名控制菜单
 echo "重命名控制菜单..."
@@ -135,10 +135,10 @@ sed -i 's/"USB 打印服务器"/"打印服务"/g' $(grep "USB 打印服务器" -
 
 # 重命名服务菜单
 echo "重命名服务菜单..."
-sed -i 's/"AirConnect"/"隔空传送"/g' package/GWen124/luci-app-airconnect/luci-app-airconnect/root/usr/share/luci/menu.d/luci-app-airconnect.json
+sed -i 's/"AirConnect"/"隔空传送"/g' package/Wen/luci-app-airconnect/luci-app-airconnect/root/usr/share/luci/menu.d/luci-app-airconnect.json
 sed -i '/"admin\/services\/smartdns": {/,/}/s/"depends": {/"order": 10,\n            "depends": {/' feeds/luci/applications/luci-app-smartdns/root/usr/share/luci/menu.d/luci-app-smartdns.json
-sed -i 's/"order": 30,/"order": 60,/' package/GWen124/luci-app-wechatpush/root/usr/share/luci/menu.d/luci-app-wechatpush.json
-sed -i 's/"解除网易云音乐播放限制"/"网易音乐"/g' package/GWen124/luci-app-unblockneteasemusic/root/usr/share/luci/menu.d/luci-app-unblockneteasemusic.json
+sed -i 's/"order": 30,/"order": 60,/' package/Wen/luci-app-wechatpush/root/usr/share/luci/menu.d/luci-app-wechatpush.json
+sed -i 's/"解除网易云音乐播放限制"/"网易音乐"/g' package/Wen/luci-app-unblockneteasemusic/root/usr/share/luci/menu.d/luci-app-unblockneteasemusic.json
 sed -i 's/msgstr "UPnP"/msgstr "UPnP服务"/g' feeds/luci/applications/luci-app-upnp/po/zh_Hans/upnp.po
 sed -i 's/"KMS 服务器"/"KMS服务"/g' $(grep "KMS 服务器" -rl ./)
 
@@ -151,10 +151,10 @@ sed -i "s/set network\.vpn0\.ifname='tun0'/set network.vpn0.device='tun0'/g" fee
 
 # 重命名管控菜单
 echo "重命名管控菜单..."
-sed -i '$a msgid "Control"' package/GWen124/luci-app-oaf/luci-app-oaf/po/zh_Hans/oaf.po
-sed -i '$a msgstr "管控"' package/GWen124/luci-app-oaf/luci-app-oaf/po/zh_Hans/oaf.po
-sed -i '/local page/a\ \ \ \ entry({"admin", "control"}, firstchild(), "Control", 44).dependent = false' package/GWen124/luci-app-oaf/luci-app-oaf/luasrc/controller/appfilter.lua
-sed -i 's/"services"/"control"/g' package/GWen124/luci-app-oaf/luci-app-oaf/luasrc/controller/appfilter.lua
+sed -i '$a msgid "Control"' package/Wen/luci-app-oaf/luci-app-oaf/po/zh_Hans/oaf.po
+sed -i '$a msgstr "管控"' package/Wen/luci-app-oaf/luci-app-oaf/po/zh_Hans/oaf.po
+sed -i '/local page/a\ \ \ \ entry({"admin", "control"}, firstchild(), "Control", 44).dependent = false' package/Wen/luci-app-oaf/luci-app-oaf/luasrc/controller/appfilter.lua
+sed -i 's/"services"/"control"/g' package/Wen/luci-app-oaf/luci-app-oaf/luasrc/controller/appfilter.lua
 sed -i 's|/services/|/control/|' feeds/luci/applications/luci-app-wol/root/usr/share/luci/menu.d/luci-app-wol.json
 
 # 重命名存储菜单
@@ -169,6 +169,6 @@ sed -i 's/"ZeroTier"/"ZeroTier虚拟网络"/g' feeds/luci/applications/luci-app-
 sed -i 's/"OpenVPN"/"OpenVPN 客户端"/g' feeds/luci/applications/luci-app-openvpn/luasrc/controller/openvpn.lua
 TIME b "重命名 完成"
 echo
-chmod -R 755 package/GWen124
+chmod -R 755 package/Wen
 echo
 TIME g "配置更新完成"
