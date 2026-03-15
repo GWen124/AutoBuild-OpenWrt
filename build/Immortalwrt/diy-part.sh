@@ -1,4 +1,6 @@
 #!/bin/bash
+
+
 # Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
 # DIY扩展二合一了，在此处可以增加插件
 # 自行拉取插件之前请SSH连接进入固件配置里面确认过没有你要的插件再单独拉取你需要的插件
@@ -24,7 +26,7 @@ TIME() {
 }
 echo 
 TIME y "自定义固件版本名字"
-# curl -o default-settings https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/OpenWrt/default-settings
+# curl -o default-settings https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/Actions/OpenWrt/default-settings
 # cp -f default-settings package/emortal/default-settings/files/99-default-settings
 
 sed -i "/^\. \/etc\/openwrt_release/a\\
@@ -36,13 +38,8 @@ echo \"DISTRIB_RELEASE='v\$(date +'%Y.%m.%d')'\" >> /etc/openwrt_release\n\
  echo \"DISTRIB_DESCRIPTION='AutoBuild Firmware Compiled By @Wen Build \$(TZ=UTC-8 date \"+%Y.%m.%d\") @ OpenWrt '\" >> /etc/openwrt_release
 " package/emortal/default-settings/files/99-default-settings
 
- curl -fsSL "https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/OpenWrt/01_sysinfo" -o "target/linux/x86/base-files/lib/preinit/01_sysinfo"
+ curl -fsSL "https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/Actions/OpenWrt/01_sysinfo" -o "target/linux/x86/base-files/lib/preinit/01_sysinfo"
 
-#替换autocore
-# rm -rf package/emortal/autocore
-# git clone --depth=1 https://github.com/coolsnowwolf/lede.git temp_lede
-# mv temp_lede/package/lean/autocore package/emortal/autocore
-# rm -rf temp_lede
 
 echo 
 TIME y "调整网络诊断地址到www.baidu.com"
@@ -68,31 +65,6 @@ TIME y "更换golang版本"
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
 
-# echo
-# TIME y "rpcd - fix timeout"
-# sed -i 's/option timeout 30/option timeout 60/g' package/system/rpcd/files/rpcd.config
-# sed -i 's#20) \* 1000#60) \* 1000#g' feeds/luci/modules/luci-base/htdocs/luci-static/resources/rpc.js
-
-# echo
-# TIME y "修正部分从第三方仓库拉取的软件 Makefile 路径问题"
-# find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/..\/..\/luci.mk/$(TOPDIR)\/feeds\/luci\/luci.mk/g' {}
-# find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/..\/..\/lang\/golang\/golang-package.mk/$(TOPDIR)\/feeds\/packages\/lang\/golang\/golang-package.mk/g' {}
-# find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/PKG_SOURCE_URL:=@GHREPO/PKG_SOURCE_URL:=https:\/\/github.com/g' {}
-# find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/PKG_SOURCE_URL:=@GHCODELOAD/PKG_SOURCE_URL:=https:\/\/codeload.github.com/g' {}
-# ############################################################################################################################################################
-# ############################################################################################################################################################
-# echo
-# TIME b "汉化 调整..."
-# sed -i 's/CPU Load/处理器负载/g' package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-# rm -rf package/Wen/luci-app-cpu-status/po/zh_Hans/cpu-status.po
-# wget -O package/Wen/luci-app-cpu-status/po/zh_Hans/cpu-status.po https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/OpenWrt/cpu-status.po
-# sed -i "s/'user %'/'用户 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-# sed -i "s/'nice %'/'调整优先级 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-# sed -i "s/'system %'/'系统 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-# sed -i "s/'idle %'/'空闲 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-# sed -i "s/'iowait %'/'IO 等待 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-# sed -i "s/'irq %'/'硬件中断 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
-# sed -i "s/'softirq %'/'软中断 %'/g" package/Wen/luci-app-cpu-status/htdocs/luci-static/resources/view/status/include/18_cpu.js
 
 #tn-netports调整
 # sed -i '/var title = E.*netports-title/,/);/c\var title = E('"'"'div'"'"', { class: '"'"'netports-title'"'"' }, [\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-buttons'"'"' }, buttons),\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-version'"'"' })\n\t\t\t]);' package/Wen/luci-app-tn-netports/htdocs/luci-static/resources/netports.js
@@ -117,19 +89,20 @@ sed -i 's/("OpenClash"), 50)/("OpenClash"), -10)/g' feeds/luci/applications/luci
 sed -i 's/("PassWall 2"), 0)/("PassWall 2"), -8)/g' package/Wen/luci-app-passwall2/luci-app-passwall2/luasrc/controller/passwall2.lua
 sed -i 's/"网络存储"/"存储"/g' `grep "网络存储" -rl ./`
 sed -i 's/"软件包"/"软件管理"/g' `grep "软件包" -rl ./`
+sed -i 's/"进程"/"进程管理"/g' `grep "进程" -rl ./`
 
 echo             
 TIME b "插件 重命名..."
 echo "重命名系统菜单"
 #status menu
-sed -i 's/"概览"/"系统概览"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
+sed -i 's/"概况"/"系统概览"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"路由"/"路由映射"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
-sed -i 's/"在线用户"/"在线设备"/g' package/Wen/luci-app-onliner/luasrc/controller/onliner.lua
+sed -i 's/“在线用户”/“在线设备”/g' package/Wen/luci-app-onliner/luasrc/controller/onliner.lua
 #system menu
 #sed -i 's/"系统"/"系统设置"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"管理权"/"权限管理"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"重启"/"立即重启"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
-sed -i 's/"备份与升级"/"备份升级"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
+sed -i 's/"备份与更新"/"备份更新"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"挂载点"/"挂载路径"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"启动项"/"启动管理"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
 sed -i 's/"软件包"/"软件管理"/g' feeds/luci/modules/luci-base/po/zh_Hans/base.po
@@ -144,7 +117,7 @@ sed -i 's/"Argon 主题设置"/"主题设置"/g' package/Wen/luci-app-argon-conf
 #services menu
 sed -i 's/"解除网易云音乐播放限制"/"网易音乐"/g' feeds/luci/applications/luci-app-unblockneteasemusic/root/usr/share/luci/menu.d/luci-app-unblockneteasemusic.json
 sed -i 's/"Vlmcsd KMS 服务器"/"KMS服务"/g' $(grep "KMS 服务器" -rl ./)
-sed -i 's/"title": "subconverter"/"title": "节点订阅"/g'  package/Wen/luci-app-subconverter/luci-app-subconverter/root/usr/share/luci/menu.d/luci-app-subconverter.json
+#sed -i 's/"title": "subconverter"/"title": "节点订阅"/g'  package/Wen/luci-app-subconverter/luci-app-subconverter/root/usr/share/luci/menu.d/luci-app-subconverter.json
 
 echo "重命名网络菜单"
 #network
@@ -157,11 +130,12 @@ sed -i "s/set network\.vpn0\.ifname='tun0'/set network.vpn0.device='tun0'/g" fee
 sed -i 's/msgstr "UPnP IGD 和 PCP"/msgstr "UPnP服务"/g' feeds/luci/applications/luci-app-upnp/po/zh_Hans/upnp.po
 sed -i 's|/services/|/network/|' feeds/luci/applications/luci-app-upnp/root/usr/share/luci/menu.d/luci-app-upnp.json
 sed -i 's/"title": "3cat"/"title": "端口转发"/g' feeds/luci/applications/luci-app-3cat/root/usr/share/luci/menu.d/luci-app-3cat.json
-sed -i 's/"Bandix 流量监控"/"流量监控"/g' package/Wen/luci-app-bandix/luci-app-bandix/po/zh_Hans/bandix.po
+#sed -i 's/"Bandix 流量监控"/"流量监控"/g' package/Wen/luci-app-bandix/luci-app-bandix/po/zh_Hans/bandix.po
 
 #echo "重命名管控菜单"
 #Control
 #sed -i '$a\msgid "Control"\nmsgstr "管控"' package/Wen/luci-app-oaf/luci-app-oaf/po/zh_Hans/oaf.po
+sed -i '1a\  "admin/control": {\n    "title": "Control",\n    "order": 50,\n    "action": {\n      "type": "firstchild"\n    },\n    "acl": [ "read" ]\n  },' package/Wen/luci-app-timecontrol/luci-app-timecontrol/root/usr/share/luci/menu.d/luci-app-timecontrol.json
 
 echo "重命名存储菜单"
 #sed -i 's/"Alist 文件列表"/"Alist列表"/g' package/Wen/luci-app-alist/luci-app-alist/po/zh_Hans/alist.po

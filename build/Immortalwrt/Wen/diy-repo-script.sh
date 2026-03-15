@@ -43,8 +43,11 @@ git clone --depth=1 -b master https://github.com/jerrykuku/luci-theme-argon pack
 # git clone --depth=1 -b js https://github.com/0x676e67/luci-theme-design package/Wen/luci-theme-design
 # argon-theme-config
 git clone --depth=1 -b master https://github.com/jerrykuku/luci-app-argon-config package/Wen/luci-app-argon-config
+# aurora
+git clone --depth=1 https://github.com/eamonxg/luci-theme-aurora package/Wen/luci-theme-aurora
 #theme-config
 # git clone --depth=1 https://github.com/sirpdboy/luci-app-advancedplus package/Wen/luci-app-advancedplus
+#git clone --depth=1 https://github.com/eamonxg/luci-app-aurora-config package/Wen/luci-app-aurora-config
 #mosdns
 git clone --depth=1 -b v5 https://github.com/sbwml/luci-app-mosdns package/Wen/luci-app-mosdns
 #passwall
@@ -72,7 +75,7 @@ git clone --depth=1 https://github.com/destan19/OpenAppFilter package/Wen/luci-a
 #clone_or_update_git_repo https://github.com/kiddin9/openwrt-packages package/Wen/luci-app-control-weburl "" luci-app-control-weburl
 #serverchan
 git clone --depth=1 -b master https://github.com/tty228/luci-app-wechatpush package/Wen/luci-app-wechatpush
-clone_or_update_git_repo https://github.com/kiddin9/kwrt-packages package/Wen/ "" wrtbwmon
+clone_or_update_git_repo https://github.com/kiddin9/op-packages package/Wen/ "" wrtbwmon
 #pushbot
 #git clone --depth=1 https://github.com/zzsj0928/luci-app-pushbot package/Wen/luci-app-pushbot
 #onliner
@@ -91,7 +94,7 @@ git clone --depth=1 -b main https://github.com/sirpdboy/luci-app-timecontrol pac
 #taskplan
 #git clone --depth=1 https://github.com/sirpdboy/luci-app-taskplan package/Wen/luci-app-taskplan
 #subconverter
-git clone --depth=1 https://github.com/kiddin9/openwrt-subconverter package/Wen/luci-app-subconverter
+#git clone --depth=1 https://github.com/kiddin9/openwrt-subconverter package/Wen/luci-app-subconverter
 #cpu status
 #git clone --depth=1 https://github.com/gSpotx2f/luci-app-cpu-status package/Wen/luci-app-cpu-status
 #tn-netports
@@ -101,7 +104,7 @@ git clone --depth=1 https://github.com/asvow/luci-app-tailscale package/Wen/luci
 #lucky
 #git clone --depth=1 https://github.com/sirpdboy/luci-app-lucky package/Wen/luci-app-lucky
 #yt-dlp
-git clone --depth=1 https://github.com/liudf0716/luci-app-yt-dlp package/Wen/luci-app-yt-dlp
+#git clone --depth=1 https://github.com/liudf0716/luci-app-yt-dlp package/Wen/luci-app-yt-dlp
 #Nikki
 #git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki package/Wen/luci-app-nikki
 #socat
@@ -109,6 +112,6 @@ git clone --depth=1 https://github.com/liudf0716/luci-app-yt-dlp package/Wen/luc
 #insomclash
 #git clone --depth=1 https://github.com/bobbyunknown/luci-app-insomclash package/Wen/luci-app-insomclash
 #bandix
-git clone --depth=1 https://github.com/timsaya/luci-app-bandix package/Wen/luci-app-bandix
-git clone --depth=1 https://github.com/timsaya/openwrt-bandix package/Wen/openwrt-bandix
-rm -f "package/Wen/openwrt-bandix/.github/workflows/Auto compile with openwrt sdk.yml"
+#git clone --depth=1 https://github.com/timsaya/luci-app-bandix package/Wen/luci-app-bandix
+#git clone --depth=1 https://github.com/timsaya/openwrt-bandix package/Wen/openwrt-bandix
+#rm -f "package/Wen/openwrt-bandix/.github/workflows/Auto compile with openwrt sdk.yml"
