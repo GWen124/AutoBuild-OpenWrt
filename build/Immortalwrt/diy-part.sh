@@ -26,7 +26,7 @@ TIME() {
 }
 echo 
 TIME y "自定义固件版本名字"
-# curl -o default-settings https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/Actions/OpenWrt/default-settings
+# curl -o default-settings https://raw.githubusercontent.com/gw124/Collection/main/Script/OpenWrt/default-settings
 # cp -f default-settings package/emortal/default-settings/files/99-default-settings
 
 sed -i "/^\. \/etc\/openwrt_release/a\\
@@ -38,7 +38,7 @@ echo \"DISTRIB_RELEASE='v\$(date +'%Y.%m.%d')'\" >> /etc/openwrt_release\n\
  echo \"DISTRIB_DESCRIPTION='AutoBuild Firmware Compiled By @Wen Build \$(TZ=UTC-8 date \"+%Y.%m.%d\") @ OpenWrt '\" >> /etc/openwrt_release
 " package/emortal/default-settings/files/99-default-settings
 
- curl -fsSL "https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/Actions/OpenWrt/01_sysinfo" -o "target/linux/x86/base-files/lib/preinit/01_sysinfo"
+ curl -fsSL "https://raw.githubusercontent.com/gw124/Collection/refs/heads/main/Script/OpenWrt/01_sysinfo" -o "target/linux/x86/base-files/lib/preinit/01_sysinfo"
 
 
 echo 
@@ -62,14 +62,34 @@ sed -i '/customized in this file/a net.netfilter.nf_conntrack_max=65535' package
 
 echo
 TIME y "更换golang版本"
+# rm -rf feeds/packages/lang/golang
+# git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
 rm -rf feeds/packages/lang/golang
-git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
-
+git clone https://github.com/sbwml/packages_lang_golang -b 26.x feeds/packages/lang/golang
 
 #tn-netports调整
-# sed -i '/var title = E.*netports-title/,/);/c\var title = E('"'"'div'"'"', { class: '"'"'netports-title'"'"' }, [\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-buttons'"'"' }, buttons),\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-version'"'"' })\n\t\t\t]);' package/Wen/luci-app-tn-netports/htdocs/luci-static/resources/netports.js
-#删除首页端口状态
-# mv feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js.del
+#sed -i '/var title = E.*netports-title/,/);/c\var title = E('"'"'div'"'"', { class: '"'"'netports-title'"'"' }, [\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-buttons'"'"' }, buttons),\n\t\t\t\tE('"'"'div'"'"', { class: '"'"'netports-version'"'"' })\n\t\t\t]);' package/Wen/luci-app-tn-netports/htdocs/luci-static/resources/netports.js
+
+
+# LuCI 概览页调整：ports 放到 system 下面、network 上面；同时把 network 提前到 memory 上面
+INC_LUCI_STATUS="feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include"
+# Port status: after 10_system.js, before 18_network.js
+[ -f "$INC_LUCI_STATUS/29_ports.js" ] && mv -f "$INC_LUCI_STATUS/29_ports.js" "$INC_LUCI_STATUS/17_ports.js" || true
+# Move Network section above Memory
+[ -f "$INC_LUCI_STATUS/30_network.js" ] && mv -f "$INC_LUCI_STATUS/30_network.js" "$INC_LUCI_STATUS/18_network.js" || true
+
+# Tailscale: avoid occasional logout after sysupgrade.
+# The init script runs `tailscaled --cleanup` unconditionally on start; make it conditional:
+# only cleanup when state_file is missing/empty.
+TS_FEEDS_DIR="feeds/packages"
+if [ -d "$TS_FEEDS_DIR" ]; then
+  TS_INIT_FILES=$(find "$TS_FEEDS_DIR" -type f -maxdepth 6 \( -name 'tailscale.init' -o -name '*tailscale*.init' -o -path '*tailscale*/files/*' \) 2>/dev/null | head -50)
+  for f in $TS_INIT_FILES; do
+    grep -q "tailscaled --cleanup" "$f" || continue
+    grep -q "only cleanup when state_file" "$f" && continue
+    sed -i 's|^[[:space:]]*/usr/sbin/tailscaled --cleanup|\t# only cleanup when state_file is missing/empty (prevents occasional NeedsLogin after upgrade)\n\tif [ ! -s "$state_file" ]; then\n\t\t/usr/sbin/tailscaled --cleanup\n\tfi|g' "$f" || true
+  done
+fi
 
 sed -i 's/--set=llvm.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' feeds/packages/lang/rust/Makefile
 
@@ -116,7 +136,7 @@ sed -i 's/"Argon 主题设置"/"主题设置"/g' package/Wen/luci-app-argon-conf
 
 #services menu
 sed -i 's/"解除网易云音乐播放限制"/"网易音乐"/g' feeds/luci/applications/luci-app-unblockneteasemusic/root/usr/share/luci/menu.d/luci-app-unblockneteasemusic.json
-sed -i 's/"Vlmcsd KMS 服务器"/"KMS服务"/g' $(grep "KMS 服务器" -rl ./)
+#sed -i 's/"Vlmcsd KMS 服务器"/"KMS服务"/g' $(grep "KMS 服务器" -rl ./)
 #sed -i 's/"title": "subconverter"/"title": "节点订阅"/g'  package/Wen/luci-app-subconverter/luci-app-subconverter/root/usr/share/luci/menu.d/luci-app-subconverter.json
 
 echo "重命名网络菜单"
@@ -145,7 +165,7 @@ sed -i 's/"文件管理器"/"文件管理"/g' feeds/luci/applications/luci-app-f
 
 echo "重命名VPN菜单"
 #vpn
-sed -i 's/"Cloudflare 零信任隧道"/"Cloudflare 云隧道"/g' feeds/luci/applications/luci-app-cloudflared/po/zh_Hans/cloudflared.po
+#sed -i 's/"Cloudflare 零信任隧道"/"Cloudflare 云隧道"/g' feeds/luci/applications/luci-app-cloudflared/po/zh_Hans/cloudflared.po
 sed -i 's/"ZeroTier"/"ZeroTier虚拟网络"/g' feeds/luci/applications/luci-app-zerotier/root/usr/share/luci/menu.d/luci-app-zerotier.json
 sed -i 's/"OpenVPN"/"OpenVPN 客户端"/g' feeds/luci/applications/luci-app-openvpn/luasrc/controller/openvpn.lua
 #sed -i 's/"IPSec VPN Server"/"IPSec VPN 服务器"/g' feeds/luci/applications/luci-app-ipsec-vpnd/root/usr/share/luci/menu.d/luci-app-ipsec-vpnd.json
