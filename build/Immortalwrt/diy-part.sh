@@ -78,26 +78,13 @@ INC_LUCI_STATUS="feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources
 # Move Network section above Memory
 [ -f "$INC_LUCI_STATUS/30_network.js" ] && mv -f "$INC_LUCI_STATUS/30_network.js" "$INC_LUCI_STATUS/18_network.js" || true
 
-# Tailscale: avoid occasional logout after sysupgrade.
-# The init script runs `tailscaled --cleanup` unconditionally on start; make it conditional:
-# only cleanup when state_file is missing/empty.
-TS_FEEDS_DIR="feeds/packages"
-if [ -d "$TS_FEEDS_DIR" ]; then
-  TS_INIT_FILES=$(find "$TS_FEEDS_DIR" -type f -maxdepth 6 \( -name 'tailscale.init' -o -name '*tailscale*.init' -o -path '*tailscale*/files/*' \) 2>/dev/null | head -50)
-  for f in $TS_INIT_FILES; do
-    grep -q "tailscaled --cleanup" "$f" || continue
-    grep -q "only cleanup when state_file" "$f" && continue
-    sed -i 's|^[[:space:]]*/usr/sbin/tailscaled --cleanup|\t# only cleanup when state_file is missing/empty (prevents occasional NeedsLogin after upgrade)\n\tif [ ! -s "$state_file" ]; then\n\t\t/usr/sbin/tailscaled --cleanup\n\tfi|g' "$f" || true
-  done
-fi
-
 sed -i 's/--set=llvm.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' feeds/packages/lang/rust/Makefile
 
 echo
 TIME b "菜单 调整..."
 sed -i 's|/services/|/network/|' feeds/luci/applications/luci-app-3cat/root/usr/share/luci/menu.d/luci-app-3cat.json
 sed -i 's|/system/|/nas/|' feeds/luci/applications/luci-app-filemanager/root/usr/share/luci/menu.d/luci-app-filemanager.json
-sed -i 's|/services/|/vpn/|' package/Wen/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale.json
+sed -i 's|/services/|/vpn/|' package/Wen/luci-app-tailscale-community/luci-app-tailscale-community/root/usr/share/luci/menu.d/luci-app-tailscale-community.json
 sed -i 's|/services/|/control/|' feeds/luci/applications/luci-app-wol/root/usr/share/luci/menu.d/luci-app-wol.json
 sed -i 's/\"services\"/\"control\"/g'  package/Wen/luci-app-oaf/luci-app-oaf/luasrc/controller/appfilter.lua
 #sed -i 's|/services/|/network/|' feeds/luci/applications/luci-app-nlbwmon/root/usr/share/luci/menu.d/luci-app-nlbwmon.json
@@ -106,7 +93,7 @@ sed -i '/"title": "SmartDNS",/a \        "order": 22,' feeds/luci/applications/l
 #sed -i '/"title": "Nikki",/a \        "order": -9,' package/Wen/luci-app-nikki/luci-app-nikki/root/usr/share/luci/menu.d/luci-app-nikki.json
 sed -i 's/("OpenClash"), 50)/("OpenClash"), -10)/g' feeds/luci/applications/luci-app-openclash/luasrc/controller/openclash.lua
 #sed -i 's/("Pass Wall"), -1)/("Pass Wall"), -9)/g' package/Wen/luci-app-passwall/luasrc/controller/passwall.lua
-sed -i 's/("PassWall 2"), 0)/("PassWall 2"), -8)/g' package/Wen/luci-app-passwall2/luci-app-passwall2/luasrc/controller/passwall2.lua
+#sed -i 's/("PassWall 2"), 0)/("PassWall 2"), -8)/g' package/Wen/luci-app-passwall2/luci-app-passwall2/luasrc/controller/passwall2.lua
 sed -i 's/"网络存储"/"存储"/g' `grep "网络存储" -rl ./`
 sed -i 's/"软件包"/"软件管理"/g' `grep "软件包" -rl ./`
 sed -i 's/"进程"/"进程管理"/g' `grep "进程" -rl ./`
@@ -169,7 +156,8 @@ echo "重命名VPN菜单"
 sed -i 's/"ZeroTier"/"ZeroTier虚拟网络"/g' feeds/luci/applications/luci-app-zerotier/root/usr/share/luci/menu.d/luci-app-zerotier.json
 sed -i 's/"OpenVPN"/"OpenVPN 客户端"/g' feeds/luci/applications/luci-app-openvpn/luasrc/controller/openvpn.lua
 #sed -i 's/"IPSec VPN Server"/"IPSec VPN 服务器"/g' feeds/luci/applications/luci-app-ipsec-vpnd/root/usr/share/luci/menu.d/luci-app-ipsec-vpnd.json
-sed -i 's/"Tailscale"/"TailScale虚拟网络"/g' package/Wen/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale.json
+#sed -i 's/"Tailscale"/"TailScale虚拟网络"/g' package/Wen/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale.json
+sed -i 's/"Tailscale"/"TailScale虚拟网络"/g' package/Wen/luci-app-tailscale-community/luci-app-tailscale-community/root/usr/share/luci/menu.d/luci-app-tailscale-community.json
 TIME b "重命名 完成"
 
 rm -rf package/feeds/packages/exim

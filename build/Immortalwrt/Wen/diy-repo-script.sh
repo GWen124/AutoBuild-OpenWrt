@@ -91,24 +91,15 @@ clone_or_update_git_repo https://github.com/sbwml/luci-app-airconnect package/We
 #git clone --depth=1 https://github.com/sirpdboy/luci-app-eqosplus package/Wen/luci-app-eqosplus
 #timecontrol
 git clone --depth=1 -b main https://github.com/sirpdboy/luci-app-timecontrol package/Wen/luci-app-timecontrol
-#taskplan
-#git clone --depth=1 https://github.com/sirpdboy/luci-app-taskplan package/Wen/luci-app-taskplan
 #subconverter
 #git clone --depth=1 https://github.com/kiddin9/openwrt-subconverter package/Wen/luci-app-subconverter
-#cpu status
-#git clone --depth=1 https://github.com/gSpotx2f/luci-app-cpu-status package/Wen/luci-app-cpu-status
 #tn-netports
 #git clone --depth=1 https://github.com/muink/luci-app-tn-netports package/Wen/luci-app-tn-netports
-#internet-detector
-git clone --depth=1 https://github.com/GWen124/luci-app-internet-detector package/Wen/luci-app-internet-detector
 #tailscale
-git clone --depth=1 https://github.com/asvow/luci-app-tailscale package/Wen/luci-app-tailscale
-#lucky
-#git clone --depth=1 https://github.com/sirpdboy/luci-app-lucky package/Wen/luci-app-lucky
+#git clone --depth=1 https://github.com/asvow/luci-app-tailscale package/Wen/luci-app-tailscale
+git clone --depth=1 https://github.com/Tokisaki-Galaxy/luci-app-tailscale-community package/Wen/luci-app-tailscale-community
 #yt-dlp
 #git clone --depth=1 https://github.com/liudf0716/luci-app-yt-dlp package/Wen/luci-app-yt-dlp
-#Nikki
-#git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki package/Wen/luci-app-nikki
 #socat
 # clone_or_update_git_repo https://github.com/Lienol/openwrt-package package/Wen/luci-app-socat "" luci-app-socat
 #insomclash
